@@ -1,39 +1,35 @@
-# vcos_components_communication
+# vcos_components_communication代码仓库说明
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+## 1. 代码仓库简介
+vcos_components_communication仓库包含通用TCP/IP网络协议栈、网络接口抽象层等子模块。其中，TCP/IP网络协议栈提供TCP、UDP、ICMP、IPv4、ARP等基础协议，对上提供类套接字接口，并支持UI界面进行参数配置；网络接口层支持ETH、CAN等典型车载总线接口
 
-#### 软件架构
-软件架构说明
+## 2. 代码目录
 
+vcos_components_communication源代码在haloosspace/components/communication目录下，目录结构如下图所示：
 
-#### 安装教程
+```
+communication
+├── CMakeLists.txt          # communication仓库的编译脚本，用于控制编译相关资源
+├── Kconfig                 # communication模块的Kconfig文件
+├── README.md               # communication仓库的readme，用于介绍该代码仓库(即本文)
+├── external                # 第三方代码目录，用于存放其它开源项目代码
+│   └── lwip                # lwip相关代码目录
+├── net_dev                 # 驱动抽象层，对驱动资源及功能进行抽象封装，供上层模块使用
+│   ├── CMakeLists.txt      # 驱动抽象层的编译脚本，用于控制编译相关资源
+│   └── eth                 # 以太网的驱动抽象层
+└── net_protocols           # 协议栈层的代码
+    ├── CMakeLists.txt      # 协议栈层的编译脚本，用于控制编译相关资源
+    ├── arp                 # arp协议实现
+    ├── icmp                # icmp协议实现
+    ├── ipv4                # ipv4协议实现
+    ├── sockets             # 网络编程接口实现
+    ├── tcp                 # tcp协议实现
+    └── udp                 # udp协议实现
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## 3. 仓库使用入门
+### 3.1. ETH
+以太协议栈详细功能配置说明与使用示例可参见 [以太协议栈开发者手册](https://gitee.com/haloos/vcos/blob/master/user_manual/components/ethernet_user_manual.md)
 
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+### 3.2. CAN
+（待开源）

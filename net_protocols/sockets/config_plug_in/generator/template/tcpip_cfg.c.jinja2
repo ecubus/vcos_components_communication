@@ -29,7 +29,14 @@
 
 #define TCPIP_START_SEC_CODE
 #include "tcpip_memmap.h"
-
+#ifdef CONFIG_MVBS
+extern FUNC(void, TCPIP_CODE) NETIO_Autosar_TcpIp_udp_rx_indication(
+    tcpip_socket_id_type socket_id,
+    P2CONST(tcpip_sock_addr_type, AUTOMATIC, CANIF_APPL_VAR) remote_addr_ptr,
+    P2VAR(uint8, AUTOMATIC, CANIF_APPL_VAR) buf_ptr,
+    uint16 buf_length
+);
+#else
 weak_function FUNC(void, TCPIP_CODE) NETIO_Autosar_TcpIp_udp_rx_indication(
     tcpip_socket_id_type socket_id,
     P2CONST(tcpip_sock_addr_type, AUTOMATIC, CANIF_APPL_VAR) remote_addr_ptr,
@@ -40,7 +47,7 @@ weak_function FUNC(void, TCPIP_CODE) NETIO_Autosar_TcpIp_udp_rx_indication(
 weak_function FUNC(void, TCPIP_CODE) Core0_Dds_Runnable_5ms(void) { }
 weak_function FUNC(void, TCPIP_CODE) Core0_Dds_Runnable_Recv(void) { }
 weak_function FUNC(void, TCPIP_CODE) DdsDemo_Stub(void) { }
-
+#endif
 #define TCPIP_STOP_SEC_CODE
 #include "tcpip_memmap.h"
 

@@ -213,6 +213,14 @@
                             <L-2 L="ZH">概述：EthIfLinkAggrThreshold 配置项用于定义以太网接口链路聚合中的阈值，该阈值决定何时触发链路聚合或解聚操作。</L-2>
                             <L-2 L="ZH">注意：在配置此参数时，需确保阈值设置符合网络的带宽和流量需求；不正确的阈值可能导致网络性能下降或不稳定；此配置项在AUTOSAR CP 4.4中未明确定义，需要根据具体实现或供应商的指导进行配置。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">1</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00029</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -262,7 +270,8 @@
                           <ADMIN-DATA>
                             <SDGS>
                               <SDG GID="VCOS:CfgUnrealized">
-                                <SD GID="VCOS:CfgLock">false</SD>
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue"></SD>
                               </SDG>
                             </SDGS>
                           </ADMIN-DATA>
@@ -473,7 +482,7 @@
                       </INTRODUCTION>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00045</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>255</UPPER-MULTIPLICITY>
+                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
                       <POST-BUILD-VARIANT-MULTIPLICITY>false</POST-BUILD-VARIANT-MULTIPLICITY>
                       <PARAMETERS>
                         <ECUC-INTEGER-PARAM-DEF UUID="ECUC:03db8723-70fd-40c6-912c-6e22b8516907">
@@ -527,7 +536,8 @@
                           <ADMIN-DATA>
                             <SDGS>
                               <SDG GID="VCOS:CfgUnrealized">
-                                <SD GID="VCOS:CfgLock">false</SD>
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue"></SD>
                               </SDG>
                             </SDGS>
                           </ADMIN-DATA>
@@ -594,133 +604,6 @@
                         </ECUC-REFERENCE-DEF>
                       </REFERENCES>
                       <SUB-CONTAINERS>
-                        <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:4c835b40-f1d5-478a-9cf3-c03ee4af8bf6">
-                          <SHORT-NAME>EthIfPhysCtrlRxMainFunctionPriorityProcessing</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Configuration of ingress FIFO based main function processing.</L-2>
-                            <L-2 L="ZH">概述：EthIfPhysCtrlRxMainFunctionPriorityProcessing配置项用于定义以太网接口物理控制器接收主函数的优先级处理，确保数据接收处理的优先级顺序符合系统要求。</L-2>
-                            <L-2 L="ZH">注意：在配置时需确保优先级设置不会导致数据处理的延迟或丢失，特别是在高数据吞吐量的网络环境中；优先级配置应遵循AUTOSAR CP 4.4标准中对于任务调度和优先级管理的相关规定；在多物理控制器的系统中，需要综合考虑各控制器间的优先级设置，以保证整体系统的性能和稳定性。</L-2>
-                          </DESC>
-                          <ADMIN-DATA>
-                            <SDGS>
-                              <SDG GID="VCOS:CfgUnrealized">
-                                <SD GID="VCOS:CfgLock">true</SD>
-                              </SDG>
-                            </SDGS>
-                          </ADMIN-DATA>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00050</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>65535</UPPER-MULTIPLICITY>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>false</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <PARAMETERS>
-                            <ECUC-FLOAT-PARAM-DEF UUID="ECUC:9c46982b-1e16-4e10-b146-010d2e665007">
-                              <SHORT-NAME>EthIfPhysCtrlRxMainFunctionPeriod</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Specifies the period of main function in seconds.</L-2>
-                                <L-2 L="ZH">概述：EthIfPhysCtrlRxMainFunctionPeriod 定义了以太网接口物理控制器接收主函数的调用周期，用于控制数据接收处理的时间间隔。</L-2>
-                                <L-2 L="ZH">注意：该周期值应根据网络通信的实时性和带宽要求进行配置；配置值过大可能导致数据延迟，过小可能增加CPU负载；确保配置的周期与系统的任务调度策略相匹配。</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00051</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                            </ECUC-FLOAT-PARAM-DEF>
-                            <ECUC-INTEGER-PARAM-DEF UUID="ECUC:21c3065f-c494-4ccf-897f-48d2eab0ee00">
-                              <SHORT-NAME>EthIfPhysCtrlRxIndicationIterations</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Max number of Ethernet frames polled per main function invocation.</L-2>
-                                <L-2 L="ZH">概述：EthIfPhysCtrlRxIndicationIterations 配置项定义了物理控制器接收到帧后，上层以太网接口模块（EthIf）调用RxIndication回调函数的迭代次数，用于处理接收到的帧。</L-2>
-                                <L-2 L="ZH">注意：在配置此项时，需要确保迭代次数与实际的帧处理能力相匹配，避免过多迭代导致处理延迟；迭代次数不宜设置过低，以免无法及时处理所有接收到的帧；此配置项的设置应考虑到系统的实时性要求和网络负载情况。</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00052</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                              <MAX>65535</MAX>
-                              <MIN>0</MIN>
-                            </ECUC-INTEGER-PARAM-DEF>
-                          </PARAMETERS>
-                          <REFERENCES>
-                            <ECUC-REFERENCE-DEF UUID="ECUC:1bd0b2f8-daad-4ff8-9400-9e5e62df4f8f">
-                              <SHORT-NAME>EthIfPhysCtrlRxIngressFifoRef</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Reference to the reception FIFO.</L-2>
-                                <L-2 L="ZH">概述：EthIfPhysCtrlRxIngressFifoRef配置项用于指定以太网接口物理控制器接收入口的FIFO引用，确保数据包能够被正确地接收并按顺序处理。</L-2>
-                                <L-2 L="ZH">注意：在配置时需确保引用的FIFO与物理控制器兼容且存在；正确配置此项对于网络性能和数据包处理的实时性至关重要；AUTOSAR CP 4.4标准中未明确列出此配置项，需根据具体实现和硬件支持情况进行适配。</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00053</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <REQUIRES-SYMBOLIC-NAME-VALUE>true</REQUIRES-SYMBOLIC-NAME-VALUE>
-                              <DESTINATION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Eth/EthConfigSet/EthCtrlConfig/EthCtrlConfigIngress/EthCtrlConfigIngressFifo</DESTINATION-REF>
-                            </ECUC-REFERENCE-DEF>
-                          </REFERENCES>
-                        </ECUC-PARAM-CONF-CONTAINER-DEF>
                       </SUB-CONTAINERS>
                     </ECUC-PARAM-CONF-CONTAINER-DEF>
                     <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:da2f1421-087a-40d5-b0bb-233f38c04fb3">
@@ -973,7 +856,7 @@
                       <ADMIN-DATA>
                         <SDGS>
                           <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">false</SD>
+                            <SD GID="VCOS:CfgLock">true</SD>
                           </SDG>
                         </SDGS>
                       </ADMIN-DATA>
@@ -1253,105 +1136,6 @@
                         </ECUC-REFERENCE-DEF>
                       </REFERENCES>
                     </ECUC-PARAM-CONF-CONTAINER-DEF>
-                    <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:8626f291-0537-47bb-bc8c-5586789009f0">
-                      <SHORT-NAME>EthIfSwitchTimeStampIndicationConfig</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Configuration of Switch timestamp indications.</L-2>
-                        <L-2 L="ZH">概述：EthIfSwitchTimeStampIndicationConfig 用于配置以太网接口的时间戳指示，这有助于网络时间同步和性能分析。</L-2>
-                        <L-2 L="ZH">注意：确保网络硬件支持时间戳功能；配置应与网络的时间同步策略一致；在AUTOSAR CP 4.4中，此配置项的具体属性应详细检查以符合标准规范。</L-2>
-                      </DESC>
-                      <ADMIN-DATA>
-                        <SDGS>
-                          <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">true</SD>
-                          </SDG>
-                        </SDGS>
-                      </ADMIN-DATA>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00066</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>65535</UPPER-MULTIPLICITY>
-                      <MULTIPLICITY-CONFIG-CLASSES>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                      </MULTIPLICITY-CONFIG-CLASSES>
-                      <POST-BUILD-VARIANT-MULTIPLICITY>false</POST-BUILD-VARIANT-MULTIPLICITY>
-                      <PARAMETERS>
-                        <ECUC-FUNCTION-NAME-DEF UUID="ECUC:1cbfbc01-4956-42fb-88ba-6ff409b4c450">
-                          <SHORT-NAME>EthIfSwitchEgressTimeStampIndicationFunction</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Enables/Disables to upper layers an egress timestamp indication function.</L-2>
-                            <L-2 L="ZH">概述：EthIfSwitchEgressTimeStampIndicationFunction 配置项用于指定当以太网接口的交换机端口发送帧时，用于指示出口时间戳的回调函数。</L-2>
-                            <L-2 L="ZH">注意：在配置以太网交换机支持时，需要确保该回调函数与硬件和底层驱动兼容；此配置项通常与时间敏感网络（如IEEE 802.1AS）相关，需要特别注意时间同步和精确度要求；在AUTOSAR CP 4.4标准中，确保此配置项的使用与标准定义的接口和行为一致。</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00068</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                          <ECUC-FUNCTION-NAME-DEF-VARIANTS>
-                            <ECUC-FUNCTION-NAME-DEF-CONDITIONAL/>
-                          </ECUC-FUNCTION-NAME-DEF-VARIANTS>
-                        </ECUC-FUNCTION-NAME-DEF>
-                        <ECUC-FUNCTION-NAME-DEF UUID="ECUC:1b917e6b-6cdf-42e5-8be7-ae630edc6ed4">
-                          <SHORT-NAME>EthIfSwitchIngressTimeStampIndicationFunction</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Enables/Disables to upper layers an ingress timestamp indication function.</L-2>
-                            <L-2 L="ZH">概述：EthIfSwitchIngressTimeStampIndicationFunction 配置项用于指定以太网接口模块在接收到带有时间戳的帧时调用的回调函数，以便应用层可以处理这些时间戳信息。</L-2>
-                            <L-2 L="ZH">注意：在使用此配置项时，需要确保网络管理器或应用层已经实现了相应的回调函数；此外，该功能通常与精确时间协议（如 IEEE 1588 PTP）相关，因此需要硬件和软件均支持该协议；最后，AUTOSAR CP 4.4标准中对于时间戳的处理可能有特定的要求，需要遵守这些要求以确保兼容性。</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00069</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                          <ECUC-FUNCTION-NAME-DEF-VARIANTS>
-                            <ECUC-FUNCTION-NAME-DEF-CONDITIONAL/>
-                          </ECUC-FUNCTION-NAME-DEF-VARIANTS>
-                        </ECUC-FUNCTION-NAME-DEF>
-                      </PARAMETERS>
-                    </ECUC-PARAM-CONF-CONTAINER-DEF>
                     <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:a26859f2-c119-451c-a50c-81fd5377b064">
                       <SHORT-NAME>EthIfTransceiver</SHORT-NAME>
                       <DESC>
@@ -1600,6 +1384,14 @@
                         <L-2 L="ZH">概述：EthIfDevErrorDetect 是一个配置参数，用于启用或禁用以太网接口模块（EthIf）的开发错误检测功能，以便在运行时监测和报告内部错误。</L-2>
                         <L-2 L="ZH">注意：在生产环境中通常禁用此功能以优化性能；开发和测试阶段建议启用以便于问题诊断；确保此配置与系统的诊断策略和性能要求相一致。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">false</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <INTRODUCTION>
                         <P>
                           <L-1 L="EN">* true: detection and notification is enabled.
@@ -1636,6 +1428,14 @@
                         <L-2 L="ZH">概述：EthIfEnableRxInterrupt 是一个配置项，用于启用或禁用以太网接口（Ethernet Interface）的接收（Rx）中断，这有助于控制网络消息的接收时机。</L-2>
                         <L-2 L="ZH">注意：在配置此项时，需要考虑实际的硬件能力和系统的实时性要求；不恰当的启用或禁用接收中断可能会影响系统的性能和响应时间；在AUTOSAR CP 4.4标准中，确保与其他网络管理配置项协同工作，避免配置冲突。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00005</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -1701,6 +1501,14 @@
                         <L-2 L="ZH">概述：EthIfEnableTxInterrupt 是一个配置项，用于启用或禁用以太网接口传输（Tx）中断，这有助于控制数据发送过程中的中断行为。</L-2>
                         <L-2 L="ZH">注意：在配置此项时，需要考虑实际的硬件能力和系统的实时性要求；不恰当的中断配置可能会导致性能瓶颈或响应时间延迟；在AUTOSAR CP 4.4标准中，确保与通信堆栈的其他部分（如Eth驱动和中断管理模块）的配置保持一致。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00006</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -2193,66 +2001,6 @@
                       <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
                       <DEFAULT-VALUE>false</DEFAULT-VALUE>
                     </ECUC-BOOLEAN-PARAM-DEF>
-                    <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:70813955-bcf5-4158-9146-b95b832fa699">
-                      <SHORT-NAME>EthIfVersionInfoApi</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Enables / Disables version info API</L-2>
-                        <L-2 L="ZH">概述：EthIfVersionInfoApi 是一个配置项，用于启用或禁用以太网接口模块（EthIf）的版本信息API，该API允许软件组件获取模块的版本信息。</L-2>
-                        <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，应当确保如果启用了版本信息API，那么必须实现相应的函数以返回正确的版本信息；如果不需要该功能，可以禁用以节省资源；在配置时应遵循项目的规范和需求，确保一致性和兼容性。</L-2>
-                      </DESC>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00007</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                      <SCOPE>LOCAL</SCOPE>
-                      <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                      <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                      <VALUE-CONFIG-CLASSES>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                      </VALUE-CONFIG-CLASSES>
-                      <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                      <DEFAULT-VALUE>false</DEFAULT-VALUE>
-                    </ECUC-BOOLEAN-PARAM-DEF>
-                    <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:8f788107-3d3e-4280-ae24-0ad29b191410">
-                      <SHORT-NAME>EthIfVersionInfoApiMacro</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Enables / Disables version info API macro implementation.</L-2>
-                        <L-2 L="ZH">概述：EthIfVersionInfoApiMacro 是一个宏定义，用于启用或禁用以太网接口模块（EthIf）的版本信息API，该API提供模块的版本信息，如主版本号、次版本号和补丁版本号。</L-2>
-                        <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，通常通过模块的配置参数来启用或禁用版本信息API，而不是直接使用宏定义；如果项目需要遵循严格的AUTOSAR标准，应通过配置参数而非宏定义来控制版本信息API的可用性；在实际应用中，需要确保如果启用了版本信息API，相应的函数实现应当提供准确的版本信息。</L-2>
-                      </DESC>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00008</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                      <SCOPE>LOCAL</SCOPE>
-                      <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                      <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                      <VALUE-CONFIG-CLASSES>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                      </VALUE-CONFIG-CLASSES>
-                      <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                      <DEFAULT-VALUE>false</DEFAULT-VALUE>
-                    </ECUC-BOOLEAN-PARAM-DEF>
                     <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:c8da15d1-4bf9-4d08-b710-afe890855205">
                       <SHORT-NAME>EthIfWakeUpSupport</SHORT-NAME>
                       <DESC>
@@ -2556,7 +2304,7 @@
                       <ADMIN-DATA>
                         <SDGS>
                           <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">false</SD>
+                            <SD GID="VCOS:CfgLock">true</SD>
                             <SD GID="VCOS:CfgValue">1</SD>
                           </SDG>
                         </SDGS>
@@ -2592,6 +2340,14 @@
                         <L-2 L="ZH">概述：EthIfRxIndicationIterations配置项定义了以太网接口(EthIf)接收到帧后，上层回调函数(ethif_rxindication)被调用的次数，用于控制接收到的网络帧处理的迭代次数。</L-2>
                         <L-2 L="ZH">注意：在配置此项时，需要确保迭代次数与系统的处理能力和实时性要求相匹配；过多的迭代可能会导致系统资源的过度消耗；此配置项在AUTOSAR CP 4.4中可能不直接存在，需根据实际的AUTOSAR版本和网络管理需求谨慎设置。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">5</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00030</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -2623,6 +2379,14 @@
                         <L-2 L="ZH">概述：EthIfTrcvLinkStateChgMainReload 配置项用于定义以太网接口传输器（Transceiver）链接状态变化时的主要重新加载行为，确保网络连接的稳定性和数据传输的连续性。</L-2>
                         <L-2 L="ZH">注意：在AUTOSAR CP 4.4中，此配置项应确保与网络管理和诊断机制兼容；重载策略应考虑系统的实时性和安全要求；配置应通过专业的配置工具进行，以避免人为错误。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">5</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <INTRODUCTION>
                         <P>
                           <L-1 L="EN">period of main function EthIf_MainFunctionTx.</L-1>
@@ -2696,6 +2460,13 @@
                         <L-2 L="ZH">概述：EthIfPublicCddHeaderFile配置项用于指定以太网接口模块(EthIf)的公共复杂设备驱动(CDD)头文件的名称，该文件包含了CDD所需的公共类型定义和API原型。</L-2>
                         <L-2 L="ZH">注意：文件名应确保与实际的头文件名一致，以便正确地包含在源代码中；路径应正确设置以确保编译器可以找到该头文件；在多供应商环境中，需确保头文件的命名不会导致命名冲突。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00024</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>65535</UPPER-MULTIPLICITY>
@@ -2746,6 +2517,14 @@
                         <L-2 L="ZH">概述：EthIfEthSetCorrectionTimeApi配置项用于启用或禁用以太网接口(EthIf)模块中的校正时间API，该API允许调整和同步以太网控制器的时间戳。</L-2>
                         <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，确保该API的使用与以太网控制器的硬件支持和时间敏感网络需求相匹配；如果不需要时间同步功能，可以禁用此API以节省资源；在配置时应考虑与其他网络管理功能的兼容性。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue"></SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <INTRODUCTION>
                         <P>
                           <L-1 L="EN">This parameter defines the existence and the name of a callout function for adjusting the local ETH Reference clock in HW. </L-1>
@@ -2784,6 +2563,14 @@
                         <L-2 L="ZH">概述：EthIfEthSetGlobalTimeApi配置项用于启用或禁用以太网接口模块（EthIf）中的全局时间设置API，该API允许设置以太网控制器的内部时钟。</L-2>
                         <L-2 L="ZH">注意：在使用此配置项时，需要确保底层的以太网控制器支持时间同步功能；此外，如果启用了全局时间API，应当确保与网络时间同步协议（如PTP）的集成兼容；在AUTOSAR CP 4.4标准中，此配置项应与其他与时间同步相关的配置项保持一致性。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue"></SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <INTRODUCTION>
                         <P>
                           <L-1 L="EN">This parameter defines the existence and the name of a callout function for adjusting the global ETH Reference clock in HW. </L-1>
@@ -2830,7 +2617,7 @@
                       <ADMIN-DATA>
                         <SDGS>
                           <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">false</SD>
+                            <SD GID="VCOS:CfgLock">true</SD>
                           </SDG>
                         </SDGS>
                       </ADMIN-DATA>
@@ -2870,7 +2657,7 @@
                       <ADMIN-DATA>
                         <SDGS>
                           <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">false</SD>
+                            <SD GID="VCOS:CfgLock">true</SD>
                           </SDG>
                         </SDGS>
                       </ADMIN-DATA>

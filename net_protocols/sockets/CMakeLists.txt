@@ -31,7 +31,7 @@ endif()
     set( INCLUDE_DIR
 
       # GENERAL
-      ${NUTTX_APPS_DIR}/components/include/autosar_os/
+      ${NUTTX_APPS_DIR}/components/include/autosar/
       ${GENDATA_DIR}/Os
       ${GENDATA_DIR}/Memmap
       ${GENDATA_DIR}/EthIf

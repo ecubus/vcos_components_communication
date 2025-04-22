@@ -324,11 +324,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/EcucDefs/TcpIp/TcpIpConfig/TcpIpLocalAddr/TcpIpStaticIpAddressConfig/TcpIpDefaultRouter</DEFINITION-REF>
-                          <VALUE>172.31.10.32</VALUE>
+                          <VALUE>192.168.10.32</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/EcucDefs/TcpIp/TcpIpConfig/TcpIpLocalAddr/TcpIpStaticIpAddressConfig/TcpIpStaticIpAddress</DEFINITION-REF>
-                          <VALUE>172.31.10.71</VALUE>
+                          <VALUE>192.168.10.71</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <SUB-CONTAINERS/>

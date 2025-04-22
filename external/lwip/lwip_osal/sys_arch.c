@@ -43,7 +43,7 @@ static VAR(sys_prot_t, ETH_PRIVATE_BSS) sys_arch_protect_nesting;
 
 #define ETH_START_SEC_PRIVATE_BSS
 #include "eth_memmap.h"
-uint8_t QueueStore0[TCPIP_MBOX_SIZE * 4];
+uint8_t QueueStore0[TCPIP_MBOX_SIZE * sizeof(void *)];
 circ_queue_t cq;
 Semaphore_t LwIpSem;
 Semaphore_t pxMutexBuffer;

@@ -10,7 +10,9 @@ vcos_components_communication源代码在haloosspace/components/communication目
 ```
 communication
 ├── CMakeLists.txt          # communication仓库的编译脚本，用于控制编译相关资源
+├── DISCLAIMER.md           # 免责声明文档
 ├── Kconfig                 # communication模块的Kconfig文件
+├── LICENSE                 # 项目许可证文件
 ├── README.md               # communication仓库的readme，用于介绍该代码仓库(即本文)
 ├── external                # 第三方代码目录，用于存放其它开源项目代码
 │   └── lwip                # lwip相关代码目录

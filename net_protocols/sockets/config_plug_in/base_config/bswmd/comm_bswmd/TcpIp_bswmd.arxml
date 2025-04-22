@@ -860,343 +860,6 @@
                         </ECUC-CHOICE-CONTAINER-DEF>
                       </SUB-CONTAINERS>
                     </ECUC-PARAM-CONF-CONTAINER-DEF>
-                    <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:761bb9d8-33d8-4066-ba87-2ac1e6024022">
-                      <SHORT-NAME>TcpIpDhcpServerConfig</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Specifies the configuration parameters of the DHCP Server sub-module.</L-2>
-                        <L-2 L="ZH">概述：TcpIpDhcpServerConfig 是一个配置项，用于定义TCP/IP协议栈中DHCP服务器的配置参数，包括地址池、租约时间等，以便动态分配网络配置给网络中的客户端。</L-2>
-                        <L-2 L="ZH">注意：在配置TcpIpDhcpServerConfig时，需要确保分配的IP地址范围不与网络中的静态IP地址冲突；租约时间应根据网络环境和客户端数量合理设置，以避免频繁的地址分配和回收；此外，还需注意与网络中其他DHCP服务器的协调，避免地址分配冲突。</L-2>
-                        <L-2 L="ZH">该配置项未使用</L-2>
-                      </DESC>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00187</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
-                      <MULTIPLICITY-CONFIG-CLASSES>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                        <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                      </MULTIPLICITY-CONFIG-CLASSES>
-                      <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                      <PARAMETERS>
-                        <ECUC-INTEGER-PARAM-DEF UUID="ECUC:cd0251e2-a4b0-462e-8b81-72f546fb0f20">
-                          <SHORT-NAME>TcpIpDhcpNetmask</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Network mask of IPv4 address or address prefix of IPv6 address in CIDR Notation, i.e. decimal value between 0 and 32 (IPv4) or 0 and 128 (IPv6) that describes the number of significant bits defining the network number or prefix of an IP address.</L-2>
-                            <L-2 L="ZH">概述：TcpIpDhcpNetmask 配置项用于定义通过DHCP协议获得的网络掩码，它是TCP/IP协议栈配置中的一部分，用于确定本地网络的大小和网络地址的边界。</L-2>
-                            <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，网络配置应支持通过DHCP动态配置，包括网络掩码；确保网络掩码与实际网络拓扑和地址分配策略相匹配；在静态配置和动态DHCP配置之间应正确处理优先级和冲突。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00189</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                          <MAX>128</MAX>
-                          <MIN>0</MIN>
-                        </ECUC-INTEGER-PARAM-DEF>
-                        <ECUC-STRING-PARAM-DEF UUID="ECUC:27f1f5a3-48a4-40fd-87fe-1771f5d75b9d">
-                          <SHORT-NAME>TcpIpDhcpDefaultRouter</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">IP address of default router (gateway).</L-2>
-                            <L-2 L="ZH">概述：TcpIpDhcpDefaultRouter配置项用于定义通过DHCP获取的默认路由器的IP地址，这是网络通信中自动配置网络参数的一部分，确保设备能够正确地访问网络。</L-2>
-                            <L-2 L="ZH">注意：在静态IP配置场景中，此配置项可能不适用；确保网络环境支持DHCP服务，以便自动获取默认路由器地址；在使用固定或静态IP地址配置的系统中，应谨慎配置或禁用此项，以避免潜在的网络配置冲突。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00190</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                          <ECUC-STRING-PARAM-DEF-VARIANTS>
-                            <ECUC-STRING-PARAM-DEF-CONDITIONAL/>
-                          </ECUC-STRING-PARAM-DEF-VARIANTS>
-                        </ECUC-STRING-PARAM-DEF>
-                      </PARAMETERS>
-                      <REFERENCES>
-                        <ECUC-REFERENCE-DEF UUID="ECUC:88016203-6b93-47a2-9ec5-ddfaf8d89faa">
-                          <SHORT-NAME>TcpIpDhcpEthIfSwitchRef</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Reference to EthIfSwitch representation.</L-2>
-                            <L-2 L="ZH">概述：TcpIpDhcpEthIfSwitchRef配置项用于指定TCP/IP DHCP客户端所使用的以太网接口，确保DHCP客户端能够通过正确的网络接口进行通信。</L-2>
-                            <L-2 L="ZH">注意：在配置TcpIpDhcpEthIfSwitchRef时，必须确保引用的以太网接口已经在系统中定义且配置正确；该配置项对于实现网络通信的正确性至关重要，错误的配置可能导致网络通信失败；在多网络接口的系统中，正确配置此项尤为重要，以确保网络服务的正确绑定和使用。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <INTRODUCTION>
-                            <P>
-                              <L-1 L="EN">Optional in case the Dhcp server is operating without an Ethernet switch.</L-1>
-                            </P>
-                          </INTRODUCTION>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00188</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>ECU</SCOPE>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <REQUIRES-SYMBOLIC-NAME-VALUE>true</REQUIRES-SYMBOLIC-NAME-VALUE>
-                          <DESTINATION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitch</DESTINATION-REF>
-                        </ECUC-REFERENCE-DEF>
-                      </REFERENCES>
-                      <SUB-CONTAINERS>
-                        <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:7fbb4baf-dcb3-438e-bd07-fee629984025">
-                          <SHORT-NAME>TcpIpDhcpAddressAssignment</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Defines a Ethernet Switch port based IP address assignment.</L-2>
-                            <L-2 L="ZH">概述：TcpIpDhcpAddressAssignment 配置项用于定义TCP/IP协议栈中，通过DHCP（动态主机配置协议）自动分配IP地址的机制。</L-2>
-                            <L-2 L="ZH">注意：在配置TcpIpDhcpAddressAssignment时，需要确保网络环境支持DHCP服务；此外，应当注意IP地址的租约时间和续租策略，以避免通信中断；在静态IP和DHCP混合使用的场景中，要确保地址分配策略之间没有冲突。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00191</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <PARAMETERS>
-                            <ECUC-STRING-PARAM-DEF UUID="ECUC:0bd234f4-45db-41cf-bf92-da0bbf5640f0">
-                              <SHORT-NAME>TcpIpDhcpAddressLowerBound</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">The lower bound IP address which shall be assigned.</L-2>
-                                <L-2 L="ZH">概述：TcpIpDhcpAddressLowerBound定义了在使用DHCP服务时，IP地址池的下界限，即可分配的最小IP地址。</L-2>
-                                <L-2 L="ZH">注意：确保该地址与网络中的其他设备地址不冲突；地址应位于子网内且遵守网络的地址规划；在配置时需与TcpIpDhcpAddressUpperBound配合使用，确保定义的地址范围合理。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <INTRODUCTION>
-                                <P>
-                                  <L-1 L="EN">If lower bound and upper bound are identical exactly this IP address shall be assigned.</L-1>
-                                </P>
-                              </INTRODUCTION>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00193</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                              <ECUC-STRING-PARAM-DEF-VARIANTS>
-                                <ECUC-STRING-PARAM-DEF-CONDITIONAL/>
-                              </ECUC-STRING-PARAM-DEF-VARIANTS>
-                            </ECUC-STRING-PARAM-DEF>
-                            <ECUC-STRING-PARAM-DEF UUID="ECUC:d1c8eb86-6ea2-4df7-b077-34d11e44ee10">
-                              <SHORT-NAME>TcpIpDhcpAddressUpperBound</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">The upper bound IP address which shall be assigned.</L-2>
-                                <L-2 L="ZH">概述：TcpIpDhcpAddressUpperBound配置项用于定义在DHCP服务器模式下，IP地址池中可分配的最高IP地址。</L-2>
-                                <L-2 L="ZH">注意：该配置项必须与TcpIpDhcpAddressLowerBound一起配置，以确保定义了一个有效的IP地址范围；地址范围内的IP地址必须属于同一子网；确保配置的上界不低于下界，避免配置错误导致IP地址分配失败。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <INTRODUCTION>
-                                <P>
-                                  <L-1 L="EN">If lower bound and upper bound are identical exactly this IP address shall be assigned.</L-1>
-                                </P>
-                              </INTRODUCTION>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00194</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                              <ECUC-STRING-PARAM-DEF-VARIANTS>
-                                <ECUC-STRING-PARAM-DEF-CONDITIONAL/>
-                              </ECUC-STRING-PARAM-DEF-VARIANTS>
-                            </ECUC-STRING-PARAM-DEF>
-                          </PARAMETERS>
-                          <REFERENCES>
-                            <ECUC-REFERENCE-DEF UUID="ECUC:84727f77-f476-4a07-8ab8-76f2e08d440b">
-                              <SHORT-NAME>TcpIpDhcpSwitchPortRef</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Reference to Ethernet Switch port.</L-2>
-                                <L-2 L="ZH">概述：TcpIpDhcpSwitchPortRef用于指定TCP/IP DHCP客户端配置中与特定以太网交换机端口的关联，以便在网络配置中实现正确的端口映射和通信。</L-2>
-                                <L-2 L="ZH">注意：在配置TcpIpDhcpSwitchPortRef时，确保引用的交换机端口已在系统中定义且与DHCP客户端的网络需求相匹配；此配置项对于实现基于端口的网络配置策略至关重要；在AUTOSAR CP 4.4标准中，确保网络配置的一致性和正确性，避免因配置错误导致的网络通信问题。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <INTRODUCTION>
-                                <P>
-                                  <L-1 L="EN">Optional in case the Dhcp server is operating without an Ethernet switch.</L-1>
-                                </P>
-                              </INTRODUCTION>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00192</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>ECU</SCOPE>
-                              <MULTIPLICITY-CONFIG-CLASSES>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              </MULTIPLICITY-CONFIG-CLASSES>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <REQUIRES-SYMBOLIC-NAME-VALUE>true</REQUIRES-SYMBOLIC-NAME-VALUE>
-                              <DESTINATION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EthSwt/EthSwtConfig/EthSwtPort</DESTINATION-REF>
-                            </ECUC-REFERENCE-DEF>
-                          </REFERENCES>
-                        </ECUC-PARAM-CONF-CONTAINER-DEF>
-                      </SUB-CONTAINERS>
-                    </ECUC-PARAM-CONF-CONTAINER-DEF>
                     <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:c6c40a77-9641-482f-9b27-5b2e20c15017">
                       <SHORT-NAME>TcpIpDuplicateAddressDetectionConfig</SHORT-NAME>
                       <DESC>
@@ -1602,70 +1265,6 @@
                                   </PARAMETERS>
                                 </ECUC-PARAM-CONF-CONTAINER-DEF>
                               </SUB-CONTAINERS>
-                            </ECUC-PARAM-CONF-CONTAINER-DEF>
-                            <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:9b6ca07e-c7d0-4c2a-96a0-6fbc7509456a">
-                              <SHORT-NAME>TcpIpAutoIpConfig</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Specifies the configuration parameters of the Auto-IP (automatic private IP addressing) sub-module.</L-2>
-                                <L-2 L="ZH">概述：TcpIpAutoIpConfig是用于配置TCP/IP协议栈中自动IP地址配置（AutoIP）的参数，它允许设备在没有DHCP服务器的情况下自动分配本地链接地址。</L-2>
-                                <L-2 L="ZH">注意：AutoIP配置应当谨慎使用，确保网络中没有DHCP服务器时才启用；在启用AutoIP时，需要配置冲突检测机制以避免IP地址冲突；AutoSAR 4.4标准中对TcpIpAutoIpConfig的具体参数和行为有详细规定，确保配置符合标准要求。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00028</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
-                              <PARAMETERS>
-                                <ECUC-FLOAT-PARAM-DEF UUID="ECUC:8f5f2041-ab8b-4534-a549-87f756b8a462">
-                                  <SHORT-NAME>TcpIpAutoIpInitTimeout</SHORT-NAME>
-                                  <DESC>
-                                    <L-2 L="EN">The time in seconds Auto-IP waits at startup, before beginning with ARP probing. This delay is used to give DHCP time to acquire a lease in case a DHCP server is present.</L-2>
-                                    <L-2 L="ZH">概述：TcpIpAutoIpInitTimeout配置项用于定义在TCP/IP协议栈中，自动IP地址配置（AutoIP）过程中的初始超时时间，这是在没有DHCP服务器响应时，网络接口尝试配置自己的IP地址的过程。</L-2>
-                                    <L-2 L="ZH">注意：该值应根据网络环境和应用需求进行调整，以确保网络接口在没有DHCP服务器时能够及时配置IP地址；超时时间设置过短可能导致IP地址配置失败，过长则可能延迟网络通信的建立；在AUTOSAR CP 4.4标准中，该配置项的具体数值应符合网络管理和时间同步的需求。</L-2>
-                                    <L-2 L="ZH">该配置项未使用</L-2>
-                                  </DESC>
-                                  <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00074</RELATED-TRACE-ITEM-REF>
-                                  <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                                  <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                                  <SCOPE>LOCAL</SCOPE>
-                                  <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                                  <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                                  <VALUE-CONFIG-CLASSES>
-                                    <ECUC-VALUE-CONFIGURATION-CLASS>
-                                      <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                      <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                    </ECUC-VALUE-CONFIGURATION-CLASS>
-                                    <ECUC-VALUE-CONFIGURATION-CLASS>
-                                      <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                      <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                    </ECUC-VALUE-CONFIGURATION-CLASS>
-                                    <ECUC-VALUE-CONFIGURATION-CLASS>
-                                      <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                      <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                    </ECUC-VALUE-CONFIGURATION-CLASS>
-                                  </VALUE-CONFIG-CLASSES>
-                                  <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                                  <MAX INTERVAL-TYPE="CLOSED">Inf</MAX>
-                                  <MIN INTERVAL-TYPE="CLOSED">0</MIN>
-                                </ECUC-FLOAT-PARAM-DEF>
-                              </PARAMETERS>
-                            </ECUC-PARAM-CONF-CONTAINER-DEF>
-                            <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:a90c20ee-eaf7-44ad-bd76-3b7c703e21a2">
-                              <SHORT-NAME>TcpIpDhcpConfig</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Specifies the configuration parameters of the DHCPv4.</L-2>
-                                <L-2 L="ZH">概述：TcpIpDhcpConfig配置项用于定义TCP/IP协议栈中DHCP（动态主机配置协议）的客户端行为和属性，包括地址租期、续租策略等，以便动态获取IP地址和其他网络配置。</L-2>
-                                <L-2 L="ZH">注意：在配置TcpIpDhcpConfig时，需要确保网络环境支持DHCP服务；正确配置租期和续租时间，避免频繁的网络断连；AUTOSAR CP 4.4标准中，DHCP的配置应遵循模块配置参数的规范，确保与网络管理模块的兼容性。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <INTRODUCTION>
-                                <P>
-                                  <L-1 L="EN">This container may be referenced by multiple IPv4 instances if they shall use the same configuration.
-                                                        This container may have multiple instances if different configurations are required for different IPv4 instances.</L-1>
-                                </P>
-                              </INTRODUCTION>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00167</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
                             </ECUC-PARAM-CONF-CONTAINER-DEF>
                             <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:0b070214-55ae-41cc-83da-b1a112ced537">
                               <SHORT-NAME>TcpIpIcmpConfig</SHORT-NAME>
@@ -4123,6 +3722,14 @@
                             <L-2 L="ZH">概述：TcpIpDomainType配置项用于指定TCP/IP协议栈中使用的网络域类型，决定了网络通信的地址族，常见的类型包括IPv4和IPv6。</L-2>
                             <L-2 L="ZH">注意：在AUTOSAR CP 4.4中，确保选择的TcpIpDomainType与项目的网络需求一致；若项目需要同时支持IPv4和IPv6，则需要为每种协议配置独立的TcpIpDomainType；配置错误可能导致网络通信失败或性能下降。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">TCPIP_AF_INET</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00030</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -4293,6 +3900,14 @@
                                 <L-2 L="ZH">概述：TcpIpAssignmentLifetime 配置项定义了TCP/IP协议栈中动态分配的IP地址的租约时间，即该地址在没有续租的情况下可以保留多久。</L-2>
                                 <L-2 L="ZH">注意：在配置动态IP地址时，需要确保租约时间与网络中的DHCP服务器设置相匹配；租约时间过短可能导致频繁的IP地址续租，增加网络负载；租约时间过长可能导致IP地址资源不足，影响新设备的接入。</L-2>
                               </DESC>
+                              <ADMIN-DATA>
+                                <SDGS>
+                                  <SDG GID="VCOS:CfgUnrealized">
+                                    <SD GID="VCOS:CfgLock">true</SD>
+                                    <SD GID="VCOS:CfgValue">TCPIP_FORGET</SD>
+                                  </SDG>
+                                </SDGS>
+                              </ADMIN-DATA>
                               <INTRODUCTION>
                                 <P>
                                   <L-1 L="EN">If TcpIpAssignmentMethod = TCPIP_STATIC then TcpIpAssignmentLifetime shall be omitted.</L-1>
@@ -4397,6 +4012,14 @@
                                 <L-2 L="ZH">概述：TcpIpAssignmentTrigger配置项用于定义TCP/IP协议栈中网络接口的IP地址分配机制，决定是静态分配还是动态获取（如DHCP）。</L-2>
                                 <L-2 L="ZH">注意：在配置TcpIpAssignmentTrigger时，需确保网络接口与分配机制的兼容性；动态分配（DHCP）可能导致启动时延迟；静态分配需确保IP地址在网络中的唯一性。</L-2>
                               </DESC>
+                              <ADMIN-DATA>
+                                <SDGS>
+                                  <SDG GID="VCOS:CfgUnrealized">
+                                    <SD GID="VCOS:CfgLock">true</SD>
+                                    <SD GID="VCOS:CfgValue">TCPIP_MANUAL</SD>
+                                  </SDG>
+                                </SDGS>
+                              </ADMIN-DATA>
                               <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00036</RELATED-TRACE-ITEM-REF>
                               <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                               <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -4429,37 +4052,6 @@
                                 </ECUC-ENUMERATION-LITERAL-DEF>
                               </LITERALS>
                             </ECUC-ENUMERATION-PARAM-DEF>
-                            <ECUC-INTEGER-PARAM-DEF UUID="ECUC:084a0064-bf71-4dfe-ac36-6a2ac3c3b6e8">
-                              <SHORT-NAME>TcpIpAssignmentPriority</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Priority of assignment (1 is highest). If a new address from an assignment method with a higher priority is available, it overwrites the IP address previously assigned by an assignment method with a lower priority.</L-2>
-                                <L-2 L="ZH">概述：TcpIpAssignmentPriority 配置项用于定义网络接口（如以太网接口）的IP地址分配优先级，它决定了在多种IP地址分配方法（如静态配置、DHCP等）可用时，系统应优先选择哪种方法。</L-2>
-                                <L-2 L="ZH">注意：在配置TcpIpAssignmentPriority时，需要确保它与系统中所有可用的IP地址分配方法相匹配；优先级设置应符合网络设计和通信需求；在AUTOSAR CP 4.4标准中，应检查该配置项是否支持所有预期的分配方法。</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00037</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                              <MAX>3</MAX>
-                              <MIN>1</MIN>
-                            </ECUC-INTEGER-PARAM-DEF>
                           </PARAMETERS>
                         </ECUC-PARAM-CONF-CONTAINER-DEF>
                         <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:308e8c12-6f3a-4981-ae9a-4aefd5cc577a">
@@ -4760,6 +4352,14 @@
                                 <L-2 L="ZH">概述：TcpIpSocketOwnerUpperLayerType配置项用于定义TCP/IP协议栈中，上层所有者（如DoIP, HTTP, or SOME/IP）使用的套接字类型。</L-2>
                                 <L-2 L="ZH">注意：在配置时需确保上层协议与所选套接字类型兼容；AUTOSAR CP 4.4标准中可能对某些上层协议支持的套接字类型有具体要求或限制；正确配置此项对于网络通信的性能和稳定性至关重要。</L-2>
                               </DESC>
+                              <ADMIN-DATA>
+                                <SDGS>
+                                  <SDG GID="VCOS:CfgUnrealized">
+                                    <SD GID="VCOS:CfgLock">true</SD>
+                                    <SD GID="VCOS:CfgValue">CDD</SD>
+                                  </SDG>
+                                </SDGS>
+                              </ADMIN-DATA>
                               <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00174</RELATED-TRACE-ITEM-REF>
                               <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                               <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5084,6 +4684,14 @@
                             <L-2 L="ZH">概述：TcpIpTcpCongestionAvoidanceEnabled 配置项用于启用或禁用TCP/IP协议栈中的拥塞避免机制，该机制负责在网络拥塞时调整数据传输速率。</L-2>
                             <L-2 L="ZH">注意：在配置此项时，需考虑网络的实际条件和性能要求；不正确的配置可能导致网络拥塞控制不当，影响通信效率；AUTOSAR CP 4.4标准中应确保该配置与系统需求和其他网络配置参数协同工作。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00061</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5113,6 +4721,14 @@
                             <L-2 L="ZH">概述：TcpIpTcpFastRecoveryEnabled 是一个配置参数，用于启用或禁用TCP快速恢复机制，该机制在TCP发生丢包时帮助快速恢复连接的稳定性和性能。</L-2>
                             <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，确保此配置项与网络堆栈的其他部分和TCP协议的实现细节保持一致；考虑到系统资源和性能要求，合理启用或禁用此功能；在配置时应注意与TcpIpTcpFastRetransmitEnabled配置项的关系和协同工作。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00063</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5142,6 +4758,14 @@
                             <L-2 L="ZH">概述：TcpIpTcpFastRetransmitEnabled配置项用于启用或禁用TCP快速重传机制，这是一种网络通信性能优化手段，旨在快速恢复丢失的数据包。</L-2>
                             <L-2 L="ZH">注意：在AUTOSAR CP 4.4中，确保网络管理策略与此配置项相协调，以优化网络性能；不当的启用或禁用可能导致网络延迟增加或通信不稳定；此配置项对实时数据传输尤为关键，需根据应用需求谨慎配置。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00062</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5201,6 +4825,14 @@
                             <L-2 L="ZH">概述：TcpIpTcpNagleEnabled配置项用于启用或禁用TCP/IP协议栈中的Nagle算法，该算法旨在减少网络上的小分组数量，通过合并小的TCP数据包来提高网络效率。</L-2>
                             <L-2 L="ZH">注意：在实时性要求较高的应用中应谨慎启用Nagle算法，因为它可能增加数据的传输延迟；此配置项的默认值依赖于具体的AUTOSAR TCP/IP协议栈实现，需查阅具体实现文档确认；在配置此项时，应考虑网络带宽和延迟的权衡。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00059</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5230,6 +4862,14 @@
                             <L-2 L="ZH">概述：TcpIpTcpSlowStartEnabled 是一个配置参数，用于启用或禁用TCP协议中的慢启动算法，该算法用于控制数据传输的拥塞窗口的增长速度，以避免网络拥塞。</L-2>
                             <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，确保此配置项与网络的拥塞控制策略一致；不当的启用或禁用可能会影响网络性能和稳定性；在配置时应考虑网络的实际条件和性能要求。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00060</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -5694,112 +5334,6 @@
                         </ECUC-INTEGER-PARAM-DEF>
                       </PARAMETERS>
                       <SUB-CONTAINERS>
-                        <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:02f979be-58b1-41d4-a7c2-3a142e02198f">
-                          <SHORT-NAME>TcpIpTcpConfigOptionFilter</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">This container describes the white list for the filtering of TCP options, i.e. segments containing TCP options not listed here shall be silently dropped.</L-2>
-                            <L-2 L="ZH">概述：TcpIpTcpConfigOptionFilter 配置项用于定义TCP/IP协议栈中，对于TCP头部中的选项字段进行过滤的参数，以控制哪些选项可以被接受或者需要被忽略。</L-2>
-                            <L-2 L="ZH">注意：在配置TcpIpTcpConfigOptionFilter时，需要确保所选的过滤规则与系统的安全性和性能要求相匹配；不正确的过滤设置可能会导致网络通信中的安全漏洞或性能问题；此配置项应与网络通信的具体需求和网络环境紧密结合，以确保正确的TCP选项被处理。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00202</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
-                          <MULTIPLICITY-CONFIG-CLASSES>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                            <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                          </MULTIPLICITY-CONFIG-CLASSES>
-                          <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                          <PARAMETERS>
-                            <ECUC-INTEGER-PARAM-DEF UUID="ECUC:ff64e87e-429c-41de-b6be-00f8c1afeb30">
-                              <SHORT-NAME>TcpIpTcpConfigOptionFilterEntry</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">TCP option kind allowed by this filter.</L-2>
-                                <L-2 L="ZH">概述：TcpIpTcpConfigOptionFilterEntry 配置项用于定义TCP/IP协议栈中TCP连接的选项过滤，它决定了哪些TCP选项应当被接受或忽略，以确保网络通信的安全性和兼容性。</L-2>
-                                <L-2 L="ZH">注意：在配置TcpIpTcpConfigOptionFilterEntry时，需要确保所选的TCP选项与网络通信的安全策略和性能要求相匹配；此外，过滤不当的TCP选项可能会导致网络连接问题；AUTOSAR CP 4.4标准中对TCP选项的处理可能有特定的限制或要求，需要仔细参考标准文档以确保配置的一致性。</L-2>
-                                <L-2 L="ZH">该配置项未使用</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00204</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY-INFINITE>true</UPPER-MULTIPLICITY-INFINITE>
-                              <SCOPE>LOCAL</SCOPE>
-                              <MULTIPLICITY-CONFIG-CLASSES>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                <ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-MULTIPLICITY-CONFIGURATION-CLASS>
-                              </MULTIPLICITY-CONFIG-CLASSES>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-MULTIPLICITY>true</POST-BUILD-VARIANT-MULTIPLICITY>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                              <MAX>255</MAX>
-                              <MIN>0</MIN>
-                            </ECUC-INTEGER-PARAM-DEF>
-                            <ECUC-INTEGER-PARAM-DEF UUID="ECUC:295ea4cd-acd8-415a-a227-2fa3ab98c3f1">
-                              <SHORT-NAME>TcpIpTcpConfigOptionFilterId</SHORT-NAME>
-                              <DESC>
-                                <L-2 L="EN">Identification of the TCP option filter.</L-2>
-                                <L-2 L="ZH">None</L-2>
-                              </DESC>
-                              <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00203</RELATED-TRACE-ITEM-REF>
-                              <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                              <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                              <SCOPE>LOCAL</SCOPE>
-                              <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                              <POST-BUILD-VARIANT-VALUE>true</POST-BUILD-VARIANT-VALUE>
-                              <VALUE-CONFIG-CLASSES>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>POST-BUILD</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                                <ECUC-VALUE-CONFIGURATION-CLASS>
-                                  <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                                  <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                                </ECUC-VALUE-CONFIGURATION-CLASS>
-                              </VALUE-CONFIG-CLASSES>
-                              <SYMBOLIC-NAME-VALUE>true</SYMBOLIC-NAME-VALUE>
-                              <MAX>255</MAX>
-                              <MIN>0</MIN>
-                            </ECUC-INTEGER-PARAM-DEF>
-                          </PARAMETERS>
-                        </ECUC-PARAM-CONF-CONTAINER-DEF>
                       </SUB-CONTAINERS>
                     </ECUC-PARAM-CONF-CONTAINER-DEF>
                     <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:3b52a4d6-4b51-40f7-90ff-369b272d8683">
@@ -8432,6 +7966,14 @@
                         <L-2 L="ZH">概述：TcpIpDevErrorDetect配置项用于启用或禁用TCP/IP协议栈中的开发错误检测功能，以便在开发阶段识别和报告潜在的错误。</L-2>
                         <L-2 L="ZH">注意：在生产代码中通常禁用此功能以优化性能；确保在开发和测试阶段启用以捕获和修正错误；此配置项的使用应符合AUTOSAR CP 4.4标准中对错误检测和报告的规定。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <INTRODUCTION>
                         <P>
                           <L-1 L="EN">* true: detection and notification is enabled.
@@ -8461,42 +8003,6 @@
                       <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
                       <DEFAULT-VALUE>false</DEFAULT-VALUE>
                     </ECUC-BOOLEAN-PARAM-DEF>
-                    <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:309e9297-0f5e-4397-9115-9776af55c0b4">
-                      <SHORT-NAME>TcpIpDhcpServerEnabled</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Enables (TRUE) or disables (FALSE) the DHCP (Dynamic Host Configuration Protocol) Server.</L-2>
-                        <L-2 L="ZH">概述：TcpIpDhcpServerEnabled 配置项用于启用或禁用TCP/IP协议栈中的DHCP服务器功能，允许网络中的设备自动获取IP地址和其他网络配置。</L-2>
-                        <L-2 L="ZH">注意：在启用此功能时，需要确保网络中没有其他DHCP服务器运行，以避免地址冲突；此外，应当配置适当的地址池以供分配；最后，考虑到安全性，应当在信任的网络环境中使用此功能。</L-2>
-                        <L-2 L="ZH">该配置项未使用</L-2>
-                      </DESC>
-                      <ADMIN-DATA>
-                        <SDGS>
-                          <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">true</SD>
-                          </SDG>
-                        </SDGS>
-                      </ADMIN-DATA>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00183</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                      <SCOPE>LOCAL</SCOPE>
-                      <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                      <VALUE-CONFIG-CLASSES>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                      </VALUE-CONFIG-CLASSES>
-                      <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                    </ECUC-BOOLEAN-PARAM-DEF>
                     <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:d3cf7704-4db9-489e-9888-1113f29d419a">
                       <SHORT-NAME>TcpIpGetAndResetMeasurementDataApi</SHORT-NAME>
                       <DESC>
@@ -8504,6 +8010,14 @@
                         <L-2 L="ZH">概述：TcpIpGetAndResetMeasurementDataApi 是一个配置项，用于启用或禁用一个API，该API允许获取并重置TCP/IP模块的测量数据，通常用于诊断或网络管理目的。</L-2>
                         <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，确保该API的使用不会违反任何实时性要求或影响网络通信性能；如果不需要诊断或性能测量功能，可以禁用此API以节省资源；使用此API时，应注意数据的原子性和一致性，避免在获取和重置过程中的数据竞争。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">false</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00217</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -8569,6 +8083,14 @@
                         <L-2 L="ZH">概述：TcpIpTcpEnabled配置项用于启用或禁用TCP/IP协议栈中的TCP协议支持，决定系统是否支持TCP协议的数据传输。</L-2>
                         <L-2 L="ZH">注意：在不需要TCP协议支持的应用中禁用此项可以节省系统资源；确保在需要TCP通信的应用中启用此项；在AUTOSAR CP 4.4标准中，此配置项的使用与属性应与标准文档保持一致，避免配置错误导致的通信问题。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00008</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -8598,6 +8120,14 @@
                         <L-2 L="ZH">概述：TcpIpUdpEnabled 配置项用于启用或禁用UDP协议模块，决定是否在AUTOSAR TCP/IP协议栈中包含对UDP通信的支持。</L-2>
                         <L-2 L="ZH">注意：在不需要UDP通信的系统中可以禁用此功能以节省资源；如果项目需求包括UDP通信，则必须启用此配置；在配置时应确保与系统中其他网络配置项的兼容性。</L-2>
                       </DESC>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="VCOS:CfgUnrealized">
+                            <SD GID="VCOS:CfgLock">true</SD>
+                            <SD GID="VCOS:CfgValue">true</SD>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00009</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -8619,36 +8149,6 @@
                         </ECUC-VALUE-CONFIGURATION-CLASS>
                       </VALUE-CONFIG-CLASSES>
                       <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                    </ECUC-BOOLEAN-PARAM-DEF>
-                    <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:7b685ee9-e083-4994-a3ff-05444fc75630">
-                      <SHORT-NAME>TcpIpVersionInfoApi</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">If true the TcpIp_GetVersionInfo API is available.</L-2>
-                        <L-2 L="ZH">概述：TcpIpVersionInfoApi 配置项用于启用或禁用 TCP/IP 栈的版本信息API，允许软件组件获取当前TCP/IP栈的版本信息。</L-2>
-                        <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，如果启用此API，必须确保实现了相应的接口以返回正确的版本信息；如果不需要此功能，可以禁用以节省资源；请注意，启用此功能可能会对系统的内存和执行时间产生轻微影响。</L-2>
-                      </DESC>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00005</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                      <SCOPE>LOCAL</SCOPE>
-                      <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                      <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                      <VALUE-CONFIG-CLASSES>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                      </VALUE-CONFIG-CLASSES>
-                      <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                      <DEFAULT-VALUE>false</DEFAULT-VALUE>
                     </ECUC-BOOLEAN-PARAM-DEF>
                     <ECUC-ENUMERATION-PARAM-DEF UUID="ECUC:9b33c160-203c-4d08-8908-a08e940e422b">
                       <SHORT-NAME>TcpIpScalabilityClass</SHORT-NAME>
@@ -8739,46 +8239,6 @@
                       <MAX INTERVAL-TYPE="OPEN">Inf</MAX>
                       <MIN INTERVAL-TYPE="OPEN">0</MIN>
                     </ECUC-FLOAT-PARAM-DEF>
-                    <ECUC-INTEGER-PARAM-DEF UUID="ECUC:e53c5c74-e451-4875-a0ea-8e8edf3052c9">
-                      <SHORT-NAME>TcpIpBufferMemory</SHORT-NAME>
-                      <DESC>
-                        <L-2 L="EN">Memory size in bytes reserved for TCP/IP buffers.</L-2>
-                        <L-2 L="ZH">概述：TcpIpBufferMemory 配置项用于定义TCP/IP协议栈中用于存储网络数据的缓冲区大小，这直接影响网络通信的效率和性能。</L-2>
-                        <L-2 L="ZH">注意：在配置TcpIpBufferMemory时，需要确保缓冲区大小与系统的内存资源和网络通信需求相匹配；过大的缓冲区可能会浪费系统资源，而过小的缓冲区可能导致数据包丢失或通信延迟；此外，该配置项应与其他网络配置参数协同优化，以达到最佳网络性能。</L-2>
-                        <L-2 L="ZH">该配置项未使用</L-2>
-                      </DESC>
-                      <ADMIN-DATA>
-                        <SDGS>
-                          <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">true</SD>
-                            <SD GID="VCOS:CfgValue">0</SD>
-                          </SDG>
-                        </SDGS>
-                      </ADMIN-DATA>
-                      <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00016</RELATED-TRACE-ITEM-REF>
-                      <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                      <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                      <SCOPE>LOCAL</SCOPE>
-                      <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                      <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                      <VALUE-CONFIG-CLASSES>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                        <ECUC-VALUE-CONFIGURATION-CLASS>
-                          <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                          <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                        </ECUC-VALUE-CONFIGURATION-CLASS>
-                      </VALUE-CONFIG-CLASSES>
-                      <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                      <MAX>4294967295</MAX>
-                      <MIN>0</MIN>
-                    </ECUC-INTEGER-PARAM-DEF>
                     <ECUC-INTEGER-PARAM-DEF UUID="ECUC:7633dda5-95ff-4d10-90e1-b14c8d44a498">
                       <SHORT-NAME>TcpIpTcpSocketMax</SHORT-NAME>
                       <DESC>
@@ -8861,81 +8321,15 @@
                             <L-2 L="ZH">概述：TcpIpArpEnabled配置项用于启用或禁用TCP/IP协议栈中的地址解析协议（ARP）功能，这是决定系统是否支持通过ARP解析网络层地址到链路层地址的关键配置。</L-2>
                             <L-2 L="ZH">注意：在不需要局域网通信或者使用静态IP地址配置的场景下，可以考虑禁用ARP以节省资源；确保在启用ARP时，网络配置正确以避免潜在的地址冲突；AUTOSAR CP 4.4标准支持此配置，但实现细节可能因AUTOSAR软件供应商而异。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00006</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                        </ECUC-BOOLEAN-PARAM-DEF>
-                        <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:b1d02fa4-0e8b-4176-9593-9c980d14fbe3">
-                          <SHORT-NAME>TcpIpAutoIpEnabled</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Enables (TRUE) or disables (FALSE) the Auto-IP (automatic private IP addressing) sub-module.</L-2>
-                            <L-2 L="ZH">概述：TcpIpAutoIpEnabled 配置项用于启用或禁用TCP/IP协议栈中的自动IP地址配置功能，这是一种无需手动配置即可为网络接口分配临时IP地址的机制。</L-2>
-                            <L-2 L="ZH">注意：在没有DHCP服务器的网络环境中，自动IP可以提供一种替代的IP地址配置方法；确保网络中的其他节点不使用相同的自动IP地址范围，以避免地址冲突；在启用自动IP时，还需考虑与其他网络配置和服务的兼容性。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <ADMIN-DATA>
-                            <SDGS>
-                              <SDG GID="VCOS:CfgUnrealized">
-                                <SD GID="VCOS:CfgLock">true</SD>
-                              </SDG>
-                            </SDGS>
-                          </ADMIN-DATA>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00011</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                        </ECUC-BOOLEAN-PARAM-DEF>
-                        <ECUC-BOOLEAN-PARAM-DEF UUID="ECUC:85088fe5-552f-4374-803a-07f01f9c802c">
-                          <SHORT-NAME>TcpIpDhcpClientEnabled</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Enables (TRUE) or disables (FALSE) the DHCP (Dynamic Host Configuration Protocol) Client.</L-2>
-                            <L-2 L="ZH">概述：TcpIpDhcpClientEnabled 配置项用于启用或禁用TCP/IP协议栈中的DHCP客户端功能，允许网络接口自动获取IP地址和其他网络配置。</L-2>
-                            <L-2 L="ZH">注意：在使用静态IP地址配置的系统中，应禁用此功能以避免地址冲突；确保在需要动态IP分配的网络环境中启用此功能；在配置此项时，还需考虑网络启动时间和可能的DHCP服务器响应延迟。</L-2>
-                            <L-2 L="ZH">该配置项未使用</L-2>
-                          </DESC>
-                          <ADMIN-DATA>
-                            <SDGS>
-                              <SDG GID="VCOS:CfgUnrealized">
-                                <SD GID="VCOS:CfgLock">true</SD>
-                              </SDG>
-                            </SDGS>
-                          </ADMIN-DATA>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00010</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
                           <SCOPE>LOCAL</SCOPE>
@@ -8964,6 +8358,14 @@
                             <L-2 L="ZH">概述：TcpIpIcmpEnabled 配置项用于启用或禁用传输控制协议/互联网协议(TCP/IP)栈中的互联网控制消息协议(ICMP)支持，这对于网络错误诊断和消息控制是重要的。</L-2>
                             <L-2 L="ZH">注意：在AUTOSAR CP 4.4标准中，确保此配置项与系统的安全和诊断需求相符；不当的ICMP配置可能会导致安全风险；在资源受限的系统中，启用ICMP可能会影响系统性能。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00007</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -8993,6 +8395,14 @@
                             <L-2 L="ZH">概述：TcpIpIpV4Enabled 配置项用于启用或禁用TCP/IP协议栈中IPv4协议的支持，决定了系统是否能够处理IPv4网络通信。</L-2>
                             <L-2 L="ZH">注意：在不需要IPv4支持的系统中可以禁用以节省资源；如果系统需要同时支持IPv4和IPv6，则应确保同时启用TcpIpIpV4Enabled和TcpIpIpV6Enabled；配置更改可能需要重新编译和测试以确保网络功能的正确性。</L-2>
                           </DESC>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="VCOS:CfgUnrealized">
+                                <SD GID="VCOS:CfgLock">true</SD>
+                                <SD GID="VCOS:CfgValue">true</SD>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
                           <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00088</RELATED-TRACE-ITEM-REF>
                           <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                           <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -9052,37 +8462,6 @@
                           </VALUE-CONFIG-CLASSES>
                           <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
                         </ECUC-BOOLEAN-PARAM-DEF>
-                        <ECUC-INTEGER-PARAM-DEF UUID="ECUC:d2e5eeba-9fe4-456f-9a7a-310e37a0ff95">
-                          <SHORT-NAME>TcpIpLocalAddrIpv4EntriesMax</SHORT-NAME>
-                          <DESC>
-                            <L-2 L="EN">Maximum number of LocalAddr table entries for IPv4.</L-2>
-                            <L-2 L="ZH">概述：TcpIpLocalAddrIpv4EntriesMax定义了系统中可配置的IPv4本地地址的最大数量，用于限制可分配给TCP/IP协议栈的IPv4地址数量。</L-2>
-                            <L-2 L="ZH">注意：在设计网络配置时，需要确保此值足够容纳预期的网络接口数量；超出此限制的地址配置可能会被忽略；该参数的设置应考虑系统的扩展性和未来的网络需求。</L-2>
-                          </DESC>
-                          <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00018</RELATED-TRACE-ITEM-REF>
-                          <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
-                          <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
-                          <SCOPE>LOCAL</SCOPE>
-                          <ORIGIN>AUTOSAR_ECUC</ORIGIN>
-                          <POST-BUILD-VARIANT-VALUE>false</POST-BUILD-VARIANT-VALUE>
-                          <VALUE-CONFIG-CLASSES>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-LINK-TIME</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>LINK</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-POST-BUILD</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                            <ECUC-VALUE-CONFIGURATION-CLASS>
-                              <CONFIG-CLASS>PRE-COMPILE</CONFIG-CLASS>
-                              <CONFIG-VARIANT>VARIANT-PRE-COMPILE</CONFIG-VARIANT>
-                            </ECUC-VALUE-CONFIGURATION-CLASS>
-                          </VALUE-CONFIG-CLASSES>
-                          <SYMBOLIC-NAME-VALUE>false</SYMBOLIC-NAME-VALUE>
-                          <MAX>255</MAX>
-                          <MIN>0</MIN>
-                        </ECUC-INTEGER-PARAM-DEF>
                       </PARAMETERS>
                     </ECUC-PARAM-CONF-CONTAINER-DEF>
                     <ECUC-PARAM-CONF-CONTAINER-DEF UUID="ECUC:396c9f1b-732d-418a-ab6c-b89dd3fd0953">

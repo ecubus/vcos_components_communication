@@ -30,7 +30,7 @@ endif()
   set( INCLUDE_DIR
 
     # GENERAL
-    ${NUTTX_APPS_DIR}/components/include/autosar_os/
+    ${NUTTX_APPS_DIR}/components/include/autosar/
     ${GENDATA_DIR}/Os
     ${GENDATA_DIR}/Memmap
     ${GENDATA_DIR}/EthIf
@@ -48,7 +48,7 @@ endif()
 
   if (CONFIG_SIM_ETH_DRIVER)
     list(APPEND INCLUDE_DIR
-      ${NUTTX_APPS_DIR}/components/include/autosar_os/
+      ${NUTTX_APPS_DIR}/components/include/autosar/
       ${NUTTX_APPS_DIR}/drivers/sim/eth/inc
       ${NUTTX_CHIP_ABS_DIR}/driver/eth/inc
     )

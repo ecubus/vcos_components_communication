@@ -73,30 +73,6 @@
         "auto_solve_list": [],
         "manual_solve_list": []
     },
-    "ETHIF011006": {
-        "rule_name": "ETHIF011006",
-        "rule_type": "repeatability_check",
-        "rule_summary": "Repeatablity check of EthIfSwitchPortGroupIdx.",
-        "rule_message": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitchPortGroup/EthIfSwitchPortGroupIdx should be unique.",
-        "rule_ruleset": {
-            "mod_path": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitchPortGroup/EthIfSwitchPortGroupIdx",
-            "base_path": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet"
-        },
-        "auto_solve_list": [],
-        "manual_solve_list": []
-    },
-    "ETHIF011007": {
-        "rule_name": "ETHIF011007",
-        "rule_type": "repeatability_check",
-        "rule_summary": "Repeatablity check of EthIfSwtPortIdx.",
-        "rule_message": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitchPortGroup/EthIfSwtPort/EthIfSwtPortIdx should be unique.",
-        "rule_ruleset": {
-            "mod_path": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitchPortGroup/EthIfSwtPort/EthIfSwtPortIdx",
-            "base_path": "/AUTOSAR/EcucDefs/EthIf/EthIfConfigSet/EthIfSwitchPortGroup"
-        },
-        "auto_solve_list": [],
-        "manual_solve_list": []
-    },
     "ETHIF016001": {
         "rule_name": "ETHIF016001",
         "rule_type": "continuity_check",

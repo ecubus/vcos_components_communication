@@ -223,21 +223,6 @@
                             </ECUC-NUMERICAL-PARAM-VALUE>
                           </PARAMETER-VALUES>
                           <SUB-CONTAINERS>
-                            <ECUC-CONTAINER-VALUE>
-                              <SHORT-NAME>TcpIpStaticArpEntry</SHORT-NAME>
-                              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/TcpIp/TcpIpConfig/TcpIpIpConfig/TcpIpIpV4Config/TcpIpArpConfig/TcpIpStaticArpEntry</DEFINITION-REF>
-                              <PARAMETER-VALUES>
-                                <ECUC-TEXTUAL-PARAM-VALUE>
-                                  <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/EcucDefs/TcpIp/TcpIpConfig/TcpIpIpConfig/TcpIpIpV4Config/TcpIpArpConfig/TcpIpStaticArpEntry/TcpIpStaticArpEntryIpAddr</DEFINITION-REF>
-                                  <VALUE>255.255.255.255</VALUE>
-                                </ECUC-TEXTUAL-PARAM-VALUE>
-                                <ECUC-TEXTUAL-PARAM-VALUE>
-                                  <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/EcucDefs/TcpIp/TcpIpConfig/TcpIpIpConfig/TcpIpIpV4Config/TcpIpArpConfig/TcpIpStaticArpEntry/TcpIpStaticArpEntryPhysAddr</DEFINITION-REF>
-                                  <VALUE>FF-FF-FF-FF-FF-FF</VALUE>
-                                </ECUC-TEXTUAL-PARAM-VALUE>
-                              </PARAMETER-VALUES>
-                              <SUB-CONTAINERS/>
-                            </ECUC-CONTAINER-VALUE>
                           </SUB-CONTAINERS>
                         </ECUC-CONTAINER-VALUE>
                       </SUB-CONTAINERS>

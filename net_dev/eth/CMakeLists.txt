@@ -62,7 +62,6 @@ endif()
   # 收集 EthIf 目录下的所需 .c 文件
   file(GLOB C_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
-    "${GENDATA_DIR}/EthIf/*.c"
   )
 
   # 合并所有源文件

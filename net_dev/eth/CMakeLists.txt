@@ -15,17 +15,6 @@
 # ##############################################################################
 
 if(CONFIG_ETH_STACK)
-if(DEFINED BOARD_NAME)
-  if(${BOARD_NAME} MATCHES "A2G_TC397_5V_TFT")
-      set(GENDATA_DIR "${NUTTX_APPS_DIR}/${APPS_DIR}/platform_cfg/tc397_cfg/gen_data")
-  endif()
-  if(${BOARD_NAME} MATCHES "E3650_DEV_KIT")
-      set(GENDATA_DIR "${NUTTX_APPS_DIR}/${APPS_DIR}/platform_cfg/e3650_cfg/gen_data")
-  endif()
-else()
-  set(GENDATA_DIR "${NUTTX_APPS_DIR}/${APPS_DIR}/cfg_prj/gen_data")
-endif()
-
   # 头文件引入
   set( INCLUDE_DIR
 
@@ -46,17 +35,28 @@ endif()
     ${NUTTX_APPS_DIR}/components/communication/net_protocols/sockets/
   )
 
-  if (CONFIG_SIM_ETH_DRIVER)
+  if(${BOARD_NAME} MATCHES "j6e_adpro_4_0")
+    list(APPEND INCLUDE_DIRS ${NUTTX_APPS_DIR}/drivers/can/j6/j6e)
+    list(APPEND INCLUDE_DIRS ${VENDOR_THIRD_PARTY_DRIVER_INCDIR})
+  endif()
+
+  if(CONFIG_RT_FRAMEWORK_MEMPOOL)
     list(APPEND INCLUDE_DIR
-      ${NUTTX_APPS_DIR}/components/include/autosar/
-      ${NUTTX_APPS_DIR}/drivers/sim/eth/inc
-      ${NUTTX_CHIP_ABS_DIR}/driver/eth/inc
+    ${GENDATA_DIR}/MemPool
     )
-  elseif(CONFIG_ARCH_CHIP_E3650)
+  endif()
+  if(CONFIG_ARCH_CHIP_E3650)
     list(APPEND INCLUDE_DIR
       ${ETH_STACK_E3XX_GETHMAC_DIR}/e3650
     )
-  else()
+  elseif(CONFIG_ARCH_CHIP_CUSTOM_TC397)
+    list(APPEND INCLUDE_DIR
+        ${ETH_STACK_TC3xx_GETHMAC_DIR}
+    )
+  elseif(CONFIG_ARCH_CHIP_J6E)
+    list(APPEND INCLUDE_DIR
+        ${ETH_STACK_J6_GETHMAC_DIR}
+    )
   endif()
 
   # 收集 EthIf 目录下的所需 .c 文件
@@ -67,6 +67,7 @@ endif()
   # 合并所有源文件
   set( ETH_STACK_SRCS
     ${C_SOURCES}
+    ${GENDATA_DIR}/EthIf/ethif_lcfg.c
   )
 
   if ((CMAKE_C_COMPILER_ID STREQUAL "GNU") AND (NOT CONFIG_SIM_ETH_DRIVER))

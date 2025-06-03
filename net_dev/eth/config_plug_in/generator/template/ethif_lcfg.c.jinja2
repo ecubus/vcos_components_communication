@@ -59,40 +59,6 @@ weak_function FUNC(Std_ReturnType, ETHIF_CODE) ethtrcv_update_linkstate(void)
 #define ETHIF_STOP_SEC_CODE
 #include "ethif_memmap.h"
 
-#ifdef ETHMCAL_AUTOSAR_VERSION_440
-#define Eth_BufIdxType eth_buf_idx_type
-#define Eth_FrameType eth_frame_type
-
-#define ETH_START_SEC_CODE
-#include "eth_memmap.h"
-extern FUNC(void, ETH_CODE) Eth_GetPhysAddr
-(
-    uint8 CtrlIdx,
-    uint8 *AddrPtr
-);
-
-extern FUNC(BufReq_ReturnType, ETH_CODE) Eth_ProvideTxBuffer
-(
-    uint8 CtrlIdx,
-    uint8 Priority,
-    Eth_BufIdxType *BufIdxPtr,
-    uint8 **BufPtr,
-    uint16 *LenBytePtr
-);
-
-extern FUNC(Std_ReturnType, ETH_CODE) Eth_Transmit(
-    uint8 CtrlIdx,
-    Eth_BufIdxType BufIdx,
-    Eth_FrameType FrameType,
-    boolean TxConfirmation,
-    uint16 LenByte,
-    const uint8 *PhysAddrPtr
-);
-#define ETH_STOP_SEC_CODE
-#include "eth_memmap.h"
-
-#endif
-
 #define ETHIF_START_SEC_CONST
 #include "ethif_memmap.h"
 
@@ -111,7 +77,7 @@ CONST(ethif_ethdrv_api_type, ETHIF_CONST) ethif_ethdrv_api[1] = {
 #endif
     NULL_PTR,
 #if (STD_ON == ETHIF_GLOBAL_TIME_SUPPORT)
-    NULL_PTR,
+    {{  EthIfGeneral["EthIfMapMcalApiPrefix"] }}_GetCurrentTime,
     NULL_PTR,
     NULL_PTR,
     NULL_PTR,

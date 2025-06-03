@@ -26,7 +26,7 @@ def generate_dynamic_code(sys_config: dict, config_dict: dict):
     with open(os.path.join(os.path.dirname(__file__), 'dict_initconfig.json'), 'w') as f:
         json.dump(config_dict["bsw"]["tcpip"]['ArPackages']['ActiveEcuC']['TcpIp'], f, indent=4)
 
-    tcpip = filter.TcpIpInfo("tcpip", config_dict["bsw"]["tcpip"]['ArPackages']['ActiveEcuC']['TcpIp'])
+    tcpip = filter.TcpIpInfo("tcpip", config_dict["bsw"]["tcpip"]['ArPackages']['ActiveEcuC']['TcpIp'], config_dict["rte"],)
     filter_config = tcpip.get_template_dynamic_code_dict()
     with open(os.path.join(os.path.dirname(__file__), 'dict_initfilter.json'), 'w') as f:
         json.dump(filter_config, f, indent=4)

@@ -295,6 +295,7 @@ pbuf_alloc(pbuf_layer layer, u16_t length, pbuf_type type)
       LWIP_ASSERT("pbuf_alloc: erroneous type", 0);
       return NULL;
   }
+  p->socket_idx = -1;
   LWIP_DEBUGF(PBUF_DEBUG | LWIP_DBG_TRACE, ("pbuf_alloc(length=%"U16_F") == %p\n", length, (void *)p));
   return p;
 }
@@ -1002,6 +1003,9 @@ pbuf_copy_partial_pbuf(struct pbuf *p_to, const struct pbuf *p_from, u16_t copy_
 
   /* iterate through pbuf chain */
   do {
+    if(p_from->socket_idx != -1) {
+      p_to->socket_idx = p_from->socket_idx;
+    }
     /* copy one part of the original chain */
     if ((p_to->len - offset_to) >= (p_from->len - offset_from)) {
       /* complete current p_from fits into current p_to */

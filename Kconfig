@@ -16,3 +16,64 @@ config MODULE_TCPIP
     default n
     ---help---
         Enable the module TcpIp
+
+config CAN_STACK
+    bool "can stack support"
+    select SIM_CAN_DRIVER if ARCH_SIM
+    default n
+	---help---
+		Enable the CAN_STACK
+
+config MODULE_COM
+    bool "net rtcom support"
+    default n
+	---help---
+		Enable the NET_RTCOM
+
+config MODULE_PDUR
+    bool "net pdurouter support"
+    default n
+	---help---
+		Enable the NET_PDUROUTER
+
+config MODULE_CANIF
+    bool "can canif support"
+    default n
+	---help---
+		Enable the CAN_CANIF
+
+config MODULE_COMM
+    bool "net comm support"
+    default n
+	---help---
+		Enable the CAN_CANIF
+
+config MODULE_CANSM
+    bool "can cansm support"
+    default n
+	---help---
+		Enable the CAN_CANSM
+
+config MODULE_NM
+    bool "net manager nm support"
+    default n
+	---help---
+		Enable the MODULE_NM
+
+config MODULE_CANNM
+    bool "net manager cannm support"
+    default n
+	---help---
+		Enable the MODULE_CANNM
+
+config MODULE_CANTRCV1145
+	bool "net manager trcv1145 support"
+	default n
+	---help---
+		Enable the MODULE_CANTRCV1145
+
+config MODULE_SOAD
+    bool "net manager soad support"
+    default n
+	---help---
+		Enable the MODULE_SOAD

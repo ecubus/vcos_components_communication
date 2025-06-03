@@ -59,8 +59,12 @@
 #include "lwip/sys.h"
 #include "lwip/stats.h"
 #include "lwip/err.h"
+#include "Lwip_Cfg.h"
 
 #include <string.h>
+#if MEM_USE_GLOBAL_POOLS
+#include "mempool_cfg.h"
+#endif
 
 #if MEM_LIBC_MALLOC
 #include <stdlib.h> /* for malloc()/free() */
@@ -151,7 +155,7 @@ mem_overflow_init_raw(void *p, size_t size)
 }
 #endif /* MEM_OVERFLOW_CHECK || MEMP_OVERFLOW_CHECK */
 
-#if MEM_LIBC_MALLOC || MEM_USE_POOLS
+#if MEM_LIBC_MALLOC || MEM_USE_POOLS || MEM_USE_GLOBAL_POOLS
 
 /** mem_init is not used when using pools instead of a heap or using
  * C library malloc().
@@ -235,7 +239,32 @@ mem_free(void *rmem)
 #endif
   mem_clib_free(rmem);
 }
+#elif MEM_USE_GLOBAL_POOLS
+/* lwIP heap implemented with different sized pools */
 
+/**
+ * Allocate memory: determine the smallest pool that is big enough
+ * to contain an element of 'size' and get an element from that pool.
+ *
+ * @param size the size in bytes of the memory needed
+ * @return a pointer to the allocated memory or NULL if the pool is empty
+ */
+void* mem_malloc(mem_size_t size)
+{
+  return (void*)tcpip_mempool_auto_alloc(LWIP_MEMPOOLTYPE_CORE, size);
+}
+
+/**
+ * Free memory previously allocated by mem_malloc. Loads the pool number
+ * and calls memp_free with that pool number to put the element back into
+ * its pool
+ *
+ * @param rmem the memory element to free
+ */
+void mem_free(void *rmem)
+{
+  tcpip_mempool_auto_free(rmem);
+}
 #elif MEM_USE_POOLS
 
 /* lwIP heap implemented with different sized pools */

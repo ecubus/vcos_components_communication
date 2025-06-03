@@ -57,7 +57,7 @@ sys_now(void)
 }
 
 void
-sys_init(void)
+lwip_sys_init(void)
 {
 }
 

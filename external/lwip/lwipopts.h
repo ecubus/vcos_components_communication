@@ -20,6 +20,9 @@
 #include "Lwip_Cfg.h"
 #include "ethif_cfg.h"
 #include "Compiler.h"
+#if (CONFIG_RT_FRAMEWORK_MEMPOOL == 1)
+#include "mempool_cfg.h"
+#endif
 
 #define VCOS_MODULE_CONFIG_MEMPOOL STD_OFF
 
@@ -153,7 +156,7 @@
 */
 #define MEMP_MEM_MALLOC                 0
 
-#if (VCOS_MODULE_CONFIG_MEMPOOL == 1)
+#if defined (tcpip_mempool_auto_alloc)
 /**
  * MEM_USE_POOLS==1: Use an alternative to malloc() by allocating from a set
  * of memory pools of various sizes. When mem_malloc is called, an element of

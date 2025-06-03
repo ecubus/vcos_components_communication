@@ -55,6 +55,11 @@ typedef size_t mem_size_t;
 typedef u16_t mem_size_t;
 #define MEM_SIZE_F U16_F
 
+#elif MEM_USE_GLOBAL_POOLS
+
+typedef u16_t mem_size_t;
+#define MEM_SIZE_F U16_F
+
 #else
 
 /* MEM_SIZE would have to be aligned, but using 64000 here instead of

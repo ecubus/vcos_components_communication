@@ -18,13 +18,24 @@
 #include <nuttx/config.h>
 #include "tcpip.h"
 #include "tcpip_priv_types.h"
+#include "tcpip_lcfg.h"
 #include "tcpip_wrapper.h"
+
+{% for socket_owner in TcpIpConfig.TcpIpSocketOwnerConfig.TcpIpSocketOwner -%}
+{%- if socket_owner["TcpIpSocketOwnerHeaderFileName"].Value != "NULL_PTR" %}
+#include "{{ socket_owner["TcpIpSocketOwnerHeaderFileName"].Value }}"
+{%- endif %}
+{%- endfor %}
 
 #if (CONFIG_MODULE_ETHIF == 1)
 #include "ethif.h"
 #include "ethif_cfg.h"
 #else
 #include "ethernetif.h"
+#endif
+
+#if (CONFIG_MODULE_SOAD == 1)
+#include "soad.h"
 #endif
 
 #define TCPIP_START_SEC_CODE

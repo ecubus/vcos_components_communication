@@ -6,9 +6,10 @@
 """
 
 class TcpIpInfo:
-    def __init__(self, name, config):
+    def __init__(self, name, config, rte_config):
         self.name = name
         self.initConfig = config
+        self.rteConfig = rte_config
         self.outContainer = {}
         self.multiContainer = [
             'TcpIpCtrl',
@@ -25,10 +26,55 @@ class TcpIpInfo:
             'TcpIpSocketOwnerConfig',
         ]
 
+    def tcpip_get_dict_by_definition_ref(self, input_dict: dict, definition_ref: str) -> dict:
+        for value in input_dict.values():
+            if isinstance(value, dict):
+                if "DefinitionRef" in value.keys():
+                    if value["DefinitionRef"].split("/")[-1] == definition_ref:
+                        return value
+        return {}
+
+    def get_tcpip_mainfunction_config(self, name: str) -> dict:
+        mainfunctionitem = {
+            "name": name,
+            "coreid": 0,
+        }
+        if "task_mappings_info" not in self.rteConfig.keys():
+            pass
+        else:
+            for task_name in list(self.rteConfig["task_mappings_info"].keys()):
+                if "schedulable_entity_info_list" not in self.rteConfig["task_mappings_info"][task_name].keys():
+                    continue
+                if isinstance(self.rteConfig["task_mappings_info"][task_name]["schedulable_entity_info_list"], list) == False:
+                    continue
+                for i in range(len(self.rteConfig["task_mappings_info"][task_name]["schedulable_entity_info_list"])):
+                    if self.rteConfig["task_mappings_info"][task_name]["schedulable_entity_info_list"][i]["name"] == name:
+                        MainfuncCoreId = int(self.rteConfig["task_mappings_info"][task_name]["core_id"])
+                        mainfunctionitem['coreid'] = MainfuncCoreId
+        return mainfunctionitem
+
+    def get_tcpip_coreid_list(self, mainfunclist: list) -> dict:
+        coreList = []
+        maxCoreId = 0
+        for items in mainfunclist:
+            coreList.append(items['coreid'])
+            if items['coreid'] > maxCoreId:
+                maxCoreId = items['coreid']
+        coreList = sorted(list(set(coreList)))
+        ret = {
+            "list": coreList,
+            "max": maxCoreId
+        }
+        return ret     
+
     def get_template_dynamic_code_dict(self):
         self.outContainer = self.tranverse_dict(self.initConfig)
         buffer_sorted_config_list = sorted(self.outContainer['TcpIpConfig']['TcpIpBufferMemoryConfig'], key=lambda x: int(x["TcpIpBufferMemoryLen"]["Value"]))
         self.outContainer['TcpIpConfig']['TcpIpBufferMemoryConfig'] = buffer_sorted_config_list
+        tcpip_mainfunc_list = []
+        mainfunc = self.get_tcpip_mainfunction_config("tcpip_main_function")
+        tcpip_mainfunc_list.append(mainfunc)
+        self.outContainer["TcpIpCoreidList"] = self.get_tcpip_coreid_list(tcpip_mainfunc_list)
         return self.outContainer
 
     def tranverse_dict(self, config):

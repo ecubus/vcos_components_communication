@@ -18,6 +18,9 @@
 #include "tcpip_cbk.h"
 #include "tcpip_types.h"
 #include "tcpip_priv_types.h"
+#if (CONFIG_TEST_CMD_IPERF == 1)
+#include "iperf.h"
+#endif
 
 #include "tcpip_wrapper.h"
 #if (CONFIG_MODULE_ETHIF == 1)
@@ -552,16 +555,7 @@ FUNC(void, TCPIP_CODE) tcpip_tx_confirmation(uint8 ethif_ctrl_idx, eth_buf_idx_t
 	(void)ethif_ctrl_idx;
 	uint8 owner_id;
 	tcpip_socket_id_type socket_id;
-#if (ETHIF_MULTI_QUEUE_SUPPORT == STD_ON)
-	uint8 FifoIdx = 0;
-	uint16 CurrTxBufferIdx = 0;
-
-	CurrTxBufferIdx = (uint16)(EthBufIdx & (uint32)ETHIF_BUFIDX_MASK);
-	FifoIdx = (uint8)((EthBufIdx & (uint32)ETHIF_VLDCHNLIDX_MASK) >> (uint8)ETHIF_FIFOIDX_POS);
-	SocketId = TcpIp_BufIdxToSocektId[FifoIdx][CurrTxBufferIdx];
-#else
 	socket_id = tcpip_buf_idx_to_socket_id[eth_buf_idx];
-#endif
 	if (socket_id >= TCPIP_MAX_NOF_SOCKETS) {
 		return;
 	}
@@ -569,11 +563,7 @@ FUNC(void, TCPIP_CODE) tcpip_tx_confirmation(uint8 ethif_ctrl_idx, eth_buf_idx_t
 		owner_id = tcpip_socket_admin[socket_id].socket_owner_id;
 		if (TcpIp_GetSocketOwnerListOfTcpIpConfig()[owner_id].socket_owner_tx_confirmation_fnc_ptr != NULL) {
 			TcpIp_GetSocketOwnerListOfTcpIpConfig()[owner_id].socket_owner_tx_confirmation_fnc_ptr(socket_id, 1);
-#if (ETHIF_MULTI_QUEUE_SUPPORT == STD_ON)
-			TcpIp_BufIdxToSocektId[FifoIdx][CurrTxBufferIdx] = TCPIP_MAX_NOF_SOCKETS;
-#else
 			tcpip_buf_idx_to_socket_id[eth_buf_idx] = TCPIP_MAX_NOF_SOCKETS;
-#endif
 		}
 	}
 #endif
@@ -778,6 +768,14 @@ static FUNC(void, TCPIP_CODE) tcpip_main_function_tx(void)
 FUNC(void, TCPIP_CODE) tcpip_main_function(void)
 {
 	tcpip_main_function_tx();
+#if (CONFIG_TEST_CMD_IPERF == 1)
+		iperf_main_function();
+#endif
+}
+
+FUNC(void, TCPIP_CODE) TcpIp_MainFunction(void)
+{
+	tcpip_main_function();
 }
 
 /****************************************************************************

@@ -4399,13 +4399,6 @@
                                 <L-2 L="ZH">概述：TcpIpSocketOwnerTcpIpEventName 配置项用于定义与特定TCP/IP套接字相关联的事件名称，这些事件用于通知套接字所有者有关网络状态变化或数据传输状态的信息。</L-2>
                                 <L-2 L="ZH">注意：在配置TcpIpSocketOwnerTcpIpEventName时，需要确保事件名称的唯一性，以避免在系统中的事件处理混淆；此外，事件名称应与实际的网络管理和数据传输逻辑相对应，以确保正确的事件触发和处理；根据AUTOSAR CP 4.4标准，还需确保配置的事件与套接字所有者的实际需求和实现逻辑相匹配。</L-2>
                               </DESC>
-                              <ADMIN-DATA>
-                                <SDGS>
-                                  <SDG GID="VCOS:CfgUnrealized">
-                                    <SD GID="VCOS:CfgLock">true</SD>
-                                  </SDG>
-                                </SDGS>
-                              </ADMIN-DATA>
                               <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00197</RELATED-TRACE-ITEM-REF>
                               <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
                               <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>
@@ -4470,13 +4463,6 @@
                                 <L-2 L="ZH">概述：TcpIpSocketOwnerHeaderFileName配置项指定了TCP/IP协议栈为Socket所有者模块生成的头文件名称，该文件包含必要的声明和定义，以便于模块通过TCP/IP协议栈进行通信。</L-2>
                                 <L-2 L="ZH">注意：文件名应遵循项目的命名约定，以确保一致性和可维护性；确保该文件在项目的包含路径中，以便于编译器找到；在AUTOSAR CP 4.4中，该配置项的使用应与TcpIp模块的配置保持一致，避免配置不匹配导致的编译或运行时错误。</L-2>
                               </DESC>
-                              <ADMIN-DATA>
-                                <SDGS>
-                                  <SDG GID="VCOS:CfgUnrealized">
-                                    <SD GID="VCOS:CfgLock">true</SD>
-                                  </SDG>
-                                </SDGS>
-                              </ADMIN-DATA>
                               <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_TcpIp_00175</RELATED-TRACE-ITEM-REF>
                               <LOWER-MULTIPLICITY>0</LOWER-MULTIPLICITY>
                               <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>

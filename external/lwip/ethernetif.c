@@ -41,11 +41,7 @@
 #define IPH_PROTO_GET(hdr) (hdr)->_proto
 
 #if (CONFIG_MODULE_ETHIF == 1)
-#if (ETHIF_MULTI_QUEUE_SUPPORT == STD_ON)
-extern tcpip_socket_id_type tcpip_buf_idx_to_socket_id[ETHIf_FIFO_CNT][ETHIf_MAX_TXBUF_SINGLE_FIFO];
-#else
 extern tcpip_socket_id_type tcpip_buf_idx_to_socket_id[ETHIf_MAX_TXBUFSTOTAL];
-#endif
 #endif
 
 #define TCPIP_START_SEC_CODE
@@ -200,15 +196,7 @@ static FUNC(err_t, TCPIP_CODE) lwip_output(struct netif *netif, struct pbuf *p)
             if(IPH_PROTO_GET(iphdr) == TCPIP_IPPROTO_UDP) {
                 for(q = p; q != NULL; q = q->next){
                     if(q->socket_idx != -1) {
-#if (ETHIF_MULTI_QUEUE_SUPPORT == STD_ON)
-                        uint8 fifo_idx = 0;
-                        uint16 curr_txbuffer_idx = 0;
-                        curr_txbuffer_idx = (uint16)(buf_index & (uint32)ETHIF_BUFIDX_MASK);    ///< 运行时每个缓存区对应的帧类型
-                        fifo_idx = (uint8)((buf_index & (uint32)ETHIF_VLDCHNLIDX_MASK) >> (uint8)ETHIF_FIFOIDX_POS);
-                        tcpip_buf_idx_to_socket_id[fifo_idx][curr_txbuffer_idx] = q->socket_idx;
-#else
                         tcpip_buf_idx_to_socket_id[buf_index] = q->socket_idx;
-#endif
                         tx_confirmation = TRUE;
                         break;
                     }

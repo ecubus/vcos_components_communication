@@ -15,7 +15,7 @@
 from func_module.validation.common.basic_rule import BasicRule, timing_decorator
 from durable.lang import *
 from durable.engine import *
-from eth.config_plug_in.validation.rules.EthIf_utils import EthIfRuleUtils
+from .EthIf_utils import EthIfRuleUtils
 from ui_adaptor.data_management import data_management
 
 # EthIfCtrlIdx 重复校验

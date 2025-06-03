@@ -1385,13 +1385,6 @@
                         <L-2 L="ZH">概述：EthIfGlobalTimeSupport 配置项用于指定以太网接口模块是否支持全局时间同步功能，这通常与 IEEE 802.1AS 或者其他时间同步协议的实现相关。</L-2>
                         <L-2 L="ZH">注意：在配置时需确保硬件和底层驱动支持时间同步功能；如果项目不需要时间同步功能，则不应启用此配置项以避免不必要的资源消耗；AUTOSAR CP 4.4标准中，此配置项应与网络管理和时间同步相关的其他配置项保持一致性。</L-2>
                       </DESC>
-                      <ADMIN-DATA>
-                        <SDGS>
-                          <SDG GID="VCOS:CfgUnrealized">
-                            <SD GID="VCOS:CfgLock">true</SD>
-                          </SDG>
-                        </SDGS>
-                      </ADMIN-DATA>
                       <RELATED-TRACE-ITEM-REF BASE="ArTrace" DEST="TRACEABLE">ECUC_EthIf_00039</RELATED-TRACE-ITEM-REF>
                       <LOWER-MULTIPLICITY>1</LOWER-MULTIPLICITY>
                       <UPPER-MULTIPLICITY>1</UPPER-MULTIPLICITY>

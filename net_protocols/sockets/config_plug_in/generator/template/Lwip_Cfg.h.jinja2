@@ -22,6 +22,7 @@
 #define LWIP_CFG_H
 
 {%- set config = get_json_config() %}
+{%- set TcpIpCoreIdListConfig = get_TcpIpCoreIdList() %}
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
@@ -71,6 +72,10 @@ a lot of data that needs to be copied, this should be set high. */
 #define {{"MAX_SOCKETS_TCP         %s" | format(config.TcpIpGeneral.TcpIpTcpSocketMax.Value)  }}
 /* @req 4.4.0/ECUC_TcpIp_00015 */
 #define {{"MAX_SOCKETS_UDP         %s" | format(config.TcpIpGeneral.TcpIpUdpSocketMax.Value)  }}
+
+{%- for coreid in TcpIpCoreIdListConfig['list'] %}
+#define {{"LWIP_MEMPOOLTYPE_CORE        OS_MEMPOOLTYPE_CORE%d" | format(coreid)  }}
+{% endfor %}
 
 /* ---------- TCP options ---------- */
 /* @req 4.4.0/ECUC_TcpIp_00008 */

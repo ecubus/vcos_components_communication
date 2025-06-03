@@ -10,3 +10,4 @@ nohup.out
 **/__pycache__/
 
 external/mvbs
+/rt_eth

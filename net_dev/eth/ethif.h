@@ -86,94 +86,84 @@ extern "C" {
 #include "ethif_memmap.h"
 
 /*!*********************************************************************************************************************
-* @brief          初始化EthIf
-* @details        获取EthIf的配置信息，将初始化状态转换为ETHIF_STATE_INIT
-* @param[in]      cfg_ptr   EthIf配置信息结构体指针
-* @reentrant      不可重入
-* @synchronous    同步
-**********************************************************************************************************************/
+ * @brief          初始化EthIf
+ * @details        获取EthIf的配置信息，将初始化状态转换为ETHIF_STATE_INIT
+ * @param[in]      cfg_ptr   EthIf配置信息结构体指针
+ * @reentrant      不可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
 FUNC(void, ETHIF_CODE) ethif_init(const ethif_config_type *cfg_ptr);
 
 /*!*********************************************************************************************************************
-* @brief          获取MAC地址
-* @details        设置索引为ctrl_idx的控制器的MAC地址，放在phys_addr_ptr指针中
-* @param[in]      ctrl_idx      控制器索引
-* @param[out]     phys_addr_ptr  物理地址指针
-* @reentrant      不可重入
-* @synchronous    同步
-* @swsid          SWS_EthIf_00061
-**********************************************************************************************************************/
+ * @brief          获取MAC地址
+ * @details        设置索引为ctrl_idx的控制器的MAC地址，放在phys_addr_ptr指针中
+ * @param[in]      ctrl_idx      控制器索引
+ * @param[out]     phys_addr_ptr  物理地址指针
+ * @reentrant      不可重入
+ * @synchronous    同步
+ * @swsid          SWS_EthIf_00061
+ **********************************************************************************************************************/
 FUNC(void, ETHIF_CODE) ethif_get_phys_addr( uint8 ctrl_idx, uint8* phys_addr_ptr);
 
 /*!*********************************************************************************************************************
-* @brief          设置MAC地址
-* @details        设置索引为ctrl_idx的控制器的MAC地址为phys_addr_ptr指针中的值
-* @param[in]      ctrl_idx      控制器索引
-* @param[in]      phys_addr_ptr  物理地址指针
-* @reentrant      对相同ctrl_idx不可重入，对不同ctrl_idx可重入
-* @synchronous    同步
-**********************************************************************************************************************/
+ * @brief          设置MAC地址
+ * @details        设置索引为ctrl_idx的控制器的MAC地址为phys_addr_ptr指针中的值
+ * @param[in]      ctrl_idx      控制器索引
+ * @param[in]      phys_addr_ptr  物理地址指针
+ * @reentrant      对相同ctrl_idx不可重入，对不同ctrl_idx可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
 FUNC(void, ETHIF_CODE) ethif_set_phys_addr(uint8 ctrl_idx, const uint8 *phys_addr_ptr);
 
 /*!*********************************************************************************************************************
-* @brief          更新物理地址过滤器
-* @details        更新索引为ctrl_idx的控制器的物理地址过滤器
-* @param[in]      ctrl_idx      控制器索引
-* @param[in]      phys_addr_ptr  物理地址指针
-* @param[in]      action       过滤器操作
-* @retval         E_OK         更新物理地址过滤器成功
-* @retval         E_NOT_OK     更新物理地址过滤器失败
-* @reentrant      对相同ctrl_idx不可重入，对不同ctrl_idx可重入
-* @synchronous    同步
-**********************************************************************************************************************/
+ * @brief          更新物理地址过滤器
+ * @details        更新索引为ctrl_idx的控制器的物理地址过滤器
+ * @param[in]      ctrl_idx      控制器索引
+ * @param[in]      phys_addr_ptr  物理地址指针
+ * @param[in]      action       过滤器操作
+ * @retval         E_OK         更新物理地址过滤器成功
+ * @retval         E_NOT_OK     更新物理地址过滤器失败
+ * @reentrant      对相同ctrl_idx不可重入，对不同ctrl_idx可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
 FUNC(Std_ReturnType, ETHIF_CODE) ethif_update_phys_addr_filter(uint8 ctrl_idx,
-    const uint8 *phys_addr_ptr, eth_filter_action_type action);
+	const uint8 *phys_addr_ptr, eth_filter_action_type action);
 
 /*!*********************************************************************************************************************
-* @brief          获取发送缓冲区
-* @details        为发送数据提供缓冲区
-* @param[in]      ctrl_idx 控制器索引
-* @param[in]      frame_type 帧类型
-* @param[in]      priority 优先级
-* @param[in]      bufidx_ptr 缓冲区索引指针
-* @param[in]      buf_ptr 缓冲区指针
-* @param[in]      lenbyte_ptr 长度字节指针
-* @retval         BUFREQ_OK 获取发送缓冲区成功
-* @retval         BUFREQ_NOT_OK 获取发送缓冲区失败
-* @retval         BUFREQ_E_BUSY 获取发送缓冲区忙
-* @retval         BUFREQ_E_OVFL 获取发送缓冲区溢出
-* @reentrant      可重入
-* @synchronous    同步
-**********************************************************************************************************************/
+ * @brief          获取发送缓冲区
+ * @details        为发送数据提供缓冲区
+ * @param[in]      ctrl_idx 控制器索引
+ * @param[in]      frame_type 帧类型
+ * @param[in]      priority 优先级
+ * @param[in]      bufidx_ptr 缓冲区索引指针
+ * @param[in]      buf_ptr 缓冲区指针
+ * @param[in]      lenbyte_ptr 长度字节指针
+ * @retval         BUFREQ_OK 获取发送缓冲区成功
+ * @retval         BUFREQ_NOT_OK 获取发送缓冲区失败
+ * @retval         BUFREQ_E_BUSY 获取发送缓冲区忙
+ * @retval         BUFREQ_E_OVFL 获取发送缓冲区溢出
+ * @reentrant      可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
 FUNC(BufReq_ReturnType, ETHIF_CODE) ethif_provide_tx_buffer(uint8 ctrl_idx, eth_frame_type frame_type,
-    uint8 priority, eth_buf_idx_type *bufidx_ptr, eth_data_type **buf_ptr, uint16 *lenbyte_ptr);
+	uint8 priority, eth_buf_idx_type *bufidx_ptr, eth_data_type **buf_ptr, uint16 *lenbyte_ptr);
 
 /*!*********************************************************************************************************************
-* @brief          发送数据
-* @details        基于申请到的buffer,将buffer中的数据发送出去
-* @param[in]      ctrl_idx 控制器索引
-* @param[in]      buf_idx 缓冲区索引
-* @param[in]      frame_type 帧类型
-* @param[in]      tx_confirmation 传输确认
-* @param[in]      len_byte 长度字节
-* @param[in]      phys_addr_ptr 物理地址指针
-* @retval         E_OK 发送数据成功
-* @retval         E_NOT_OK 发送数据失败
-* @reentrant      对不同的ctrl_idx和buf_idx，是可重入的
-* @synchronous    同步
-**********************************************************************************************************************/
+ * @brief          发送数据
+ * @details        基于申请到的buffer,将buffer中的数据发送出去
+ * @param[in]      ctrl_idx 控制器索引
+ * @param[in]      buf_idx 缓冲区索引
+ * @param[in]      frame_type 帧类型
+ * @param[in]      tx_confirmation 传输确认
+ * @param[in]      len_byte 长度字节
+ * @param[in]      phys_addr_ptr 物理地址指针
+ * @retval         E_OK 发送数据成功
+ * @retval         E_NOT_OK 发送数据失败
+ * @reentrant      对不同的ctrl_idx和buf_idx，是可重入的
+ * @synchronous    同步
+ **********************************************************************************************************************/
 FUNC(Std_ReturnType, ETHIF_CODE) ethif_transmit(uint8 ctrl_idx, eth_buf_idx_type buf_idx,
-    eth_frame_type frame_type, boolean tx_confirmation, uint16 len_byte, const uint8 *phys_addr_ptr);
-
-/*!*********************************************************************************************************************
-* @brief          发送确认函数
-* @details        处理从驱动器发送的确认，并传递至上层
-* @param[in]      ctrl_idx      控制器索引
-* @param[in]      buf_idx       缓冲区索引
-* @reentrant      不可重入
-* @synchronous    同步
-**********************************************************************************************************************/
-FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf_idx);
+	eth_frame_type frame_type, boolean tx_confirmation, uint16 len_byte, const uint8 *phys_addr_ptr);
 
 /*!*********************************************************************************************************************
  * @brief          控制器模式回调函数
@@ -184,6 +174,23 @@ FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf
  * @synchronous    同步
  **********************************************************************************************************************/
 FUNC(void, ETHIF_CODE) ethif_ctrlmode_indication(uint8 ctrl_idx, eth_mode_type ctrlmode);
+
+#if (ETHIF_GLOBAL_TIME_SUPPORT == STD_ON)
+
+/*!*********************************************************************************************************************
+ * @brief          获取当前Mac时钟时间
+ * @details        获取索引为ctrl_idx的控制器的当前时间
+ * @param[in]      ctrl_idx 控制器索引
+ * @param[out]     time_qual_ptr 时间质量指针
+ * @param[out]     timestamp_ptr 时间戳指针
+ * @reentrant      不可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
+FUNC(Std_ReturnType, ETHIF_CODE) ethif_get_current_time(uint8 ctrl_idx,
+	eth_timestamp_qual_type* time_qual_ptr, eth_timestamp_type* timestamp_ptr);
+
+#endif
+
 #define ETHIF_STOP_SEC_CODE
 #include "ethif_memmap.h"
 

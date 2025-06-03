@@ -426,7 +426,7 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg, 
  * sys_init() must be called before anything else.
  * Initialize the sys_arch layer.
  */
-void sys_init(void);
+void lwip_sys_init(void);
 
 #ifndef sys_jiffies
 /**

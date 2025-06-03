@@ -43,16 +43,6 @@ extern "C"
 {%- else %}
 #define ETHIF_GET_COUNTER_VALUES_ENABLE STD_OFF
 {%- endif %}
-{%- if EthIfGeneral["EthIfMapMcalApiPrefix"] == "EthMcal"%}
-#define ETHIF_MULTI_QUEUE_SUPPORT                (STD_ON)    ///< 使能/关闭多队列功能
-#define ETHIf_MAX_TXBUF_SINGLE_FIFO              (4u)        ///< 单个FIFO里里面的最大buffer数量
-#define ETHIf_FIFO_CNT                           {{  EthIfGeneral["EthIfMapMcalApiPrefix"]  | upper }}_CTRL0_TXFIFO_CFGD        ///< 多队列发送FIFO的数量
-#define ETHIF_FIFOIDX_POS                        (13u)       ///< 需要和ETH_17_GETHMACV2_FIFOIDX_POS保持一致
-#define ETHIF_VLDCHNLIDX_MASK               (0x0000E000U)    ///< 需要和ETH_17_GETHMACV2_VLDCHNLIDX_MASK保持一致
-#define ETHIF_BUFIDX_MASK                   (0x00001FFFU)    ///< 需要和ETH_17_GETHMACV2_BUFIDX_MASK保持一致
-{%- else %}
-#define ETHIF_MULTI_QUEUE_SUPPORT                (STD_OFF)    ///< 使能/关闭多队列功能
-{%- endif %}
 #if defined ({{  EthIfGeneral["EthIfMapMcalApiPrefix"]  | upper }}_CNTRL0_TXBUFFER_COUNT)
 #define ETHIf_MAX_TXBUFSTOTAL                   ({{  EthIfGeneral["EthIfMapMcalApiPrefix"]  | upper }}_CNTRL0_TXBUFFER_COUNT)   ///< 最大TXBUF数量
 #else

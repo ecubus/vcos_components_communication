@@ -52,6 +52,7 @@ FUNC(void, ETHIF_CODE) ethif_rxindication(uint8 ctrl_idx, eth_frame_type frame_t
     boolean is_broadcast, const uint8 *phys_addr_ptr, eth_data_type *data_ptr, uint16 len_byte);
 #endif
 
+#if defined(ETHMCAL_AUTOSAR_VERSION_422)
 /*!*********************************************************************************************************************
 * @brief          发送确认函数
 * @details        处理从驱动器发送的确认，并传递至上层
@@ -61,7 +62,9 @@ FUNC(void, ETHIF_CODE) ethif_rxindication(uint8 ctrl_idx, eth_frame_type frame_t
 * @synchronous    同步
 **********************************************************************************************************************/
 FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf_idx);
-
+#else
+FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf_idx, Std_ReturnType result);
+#endif
 /*!*********************************************************************************************************************
  * @brief          控制器模式回调函数
  * @details        处理控制器模式的变化

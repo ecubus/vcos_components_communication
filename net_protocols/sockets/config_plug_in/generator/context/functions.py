@@ -40,6 +40,12 @@ class Function(FunctionBase):
 
     @staticmethod
     @pass_context
+    def get_TcpIpCoreIdList(context):
+        config = context["json"]["TcpIpCoreidList"]
+        return config
+
+    @staticmethod
+    @pass_context
     def convert_to_zero_and_one(self, context):
         if (context):
             return 1

@@ -21,6 +21,7 @@
 #include <nuttx/semaphore.h>
 #include <nuttx/circbuf.h>
 #include <nuttx/mutex.h>
+#include <nuttx/signal.h>
 #include <nuttx/irq.h>
 #include <semaphore.h>
 
@@ -75,7 +76,7 @@ typedef SemaphoreHandle_t                     sys_sem_t;
 #define sys_sem_valid(sem)                    (((sem) != NULL) && (*(sem) != NULL))
 #define sys_sem_set_invalid(sem)              (*(sem) = NULL)
 
-typedef struct mutex_s sys_mutex_t;
+typedef struct rmutex_s sys_mutex_t;
 #define sys_mutex_valid(sem)                  (((mutex) != NULL) && (*(mutex) != NULL))
 #define sys_mutex_set_invalid(mutex)          (*(mutex) = NULL)
 

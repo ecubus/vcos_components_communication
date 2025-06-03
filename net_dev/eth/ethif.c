@@ -91,6 +91,7 @@ FUNC(Std_ReturnType, ETHIF_CODE) ethif_get_controller_mode(uint8 ctrl_idx, eth_m
 			      E_NOT_OK);
 
 	Std_ReturnType ret;
+
 	if (ctrl_idx < ETHIF_CTRLS_CNT) {
 		*ctrlmode_ptr = ethif_internal.ethif_ctrlmode[ctrl_idx];
 		ret = E_OK;
@@ -170,7 +171,11 @@ FUNC(Std_ReturnType, ETHIF_CODE) ethif_update_phys_addr_filter(uint8 ctrl_idx,
 	return ret;
 }
 
+#if defined(ETHMCAL_AUTOSAR_VERSION_422)
 FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf_idx)
+#else
+FUNC(void, ETHIF_CODE) ethif_txconfirmation(uint8 ctrl_idx, eth_buf_idx_type buf_idx, Std_ReturnType Result)
+#endif
 {
 	ETHIF_DET_REPORTERROR_NO_RV((ETHIF_STATE_INIT == ethif_internal.init_status),
 				    ETHIF_ETHIF_SERVICE_ID_TX_CONFIRMATION_ETHIF_E_NOT_INITIALIZED);
@@ -343,6 +348,11 @@ FUNC(void, ETHIF_CODE) ethif_mainfunction_state(void)
 	return;
 #endif
 }
+
+FUNC(void, ETHIF_CODE) EthIf_MainFunctionState(void)
+{
+	ethif_mainfunction_state();
+}
 #endif
 
 FUNC(BufReq_ReturnType, ETHIF_CODE) ethif_provide_tx_buffer(uint8 ctrl_idx,
@@ -375,7 +385,7 @@ FUNC(BufReq_ReturnType, ETHIF_CODE) ethif_provide_tx_buffer(uint8 ctrl_idx,
 		if (INVALID_VLAN_ID != ethif_config_pointer->ethif_ctrl_cfg[ctrl_idx].ethif_vlan_id) {
 			if (priority < PRIORITY_SIZE) {
 				*lenbyte_ptr = (*lenbyte_ptr + VLAN_TAG_SIZE);
-                /* Attention: this function uses five parameters */
+		/* Attention: this function uses five parameters */
 				ret = eth_provide_txbuffer(eth_drv_api_idx)
 				(ethif_config_pointer->ethif_ctrl_cfg[ctrl_idx].ethif_eth_ctrl_id,
 						      priority, bufidx_ptr, buf_ptr, lenbyte_ptr);
@@ -402,7 +412,7 @@ FUNC(BufReq_ReturnType, ETHIF_CODE) ethif_provide_tx_buffer(uint8 ctrl_idx,
 				ret = BUFREQ_E_NOT_OK;
 			}
 		} else {
-            /* Attention: this function uses five parameters */
+	    /* Attention: this function uses five parameters */
 			ret = eth_provide_txbuffer(eth_drv_api_idx)
 			(ethif_config_pointer->ethif_ctrl_cfg[ctrl_idx].ethif_eth_ctrl_id, priority,
 					      bufidx_ptr, buf_ptr, lenbyte_ptr);
@@ -735,6 +745,41 @@ FUNC(Std_ReturnType, ETHIF_CODE) ethif_check_linkstate_chg(void)
 	}
 	return ret;
 }
+
+#if (ETHIF_GLOBAL_TIME_SUPPORT == STD_ON)
+
+/*!*********************************************************************************************************************
+ * @brief          获取当前Mac时钟时间
+ * @details        获取索引为ctrl_idx的控制器的当前时间
+ * @param[in]      ctrl_idx 控制器索引
+ * @param[out]     time_qual_ptr 时间质量指针
+ * @param[out]     timestamp_ptr 时间戳指针
+ * @reentrant      不可重入
+ * @synchronous    同步
+ **********************************************************************************************************************/
+FUNC(Std_ReturnType, ETHIF_CODE) ethif_get_current_time(uint8 ctrl_idx,
+	eth_timestamp_qual_type* time_qual_ptr, eth_timestamp_type* timestamp_ptr)
+{
+	ETHIF_DET_REPORTERROR((ETHIF_STATE_INIT == ethif_internal.init_status),
+		ETHIF_ETHIF_SERVICE_ID_GET_CURRENT_TIME_ETHIF_E_NOT_INITIALIZED, E_NOT_OK);
+
+	ETHIF_DET_REPORTERROR((ctrl_idx < ethif_config_pointer->ethif_ctrl_count),
+		ETHIF_ETHIF_SERVICE_ID_GET_CURRENT_TIME_ETHIF_E_INV_CTRL_IDX, E_NOT_OK);
+
+	ETHIF_DET_REPORTERROR(((NULL != time_qual_ptr) && (NULL != timestamp_ptr)),
+		ETHIF_ETHIF_SERVICE_ID_GET_CURRENT_TIME_ETHIF_E_PARAM_POINTER, E_NOT_OK);
+
+	uint8 eth_drv_api_idx = 0;
+
+	Std_ReturnType ret;
+
+	eth_drv_api_idx = ethif_config_pointer->ethif_ctrl_cfg[ctrl_idx].eth_drv_api_idx;
+	ret = eth_get_currenttime(eth_drv_api_idx)(ethif_config_pointer->ethif_ctrl_cfg[ctrl_idx].ethif_eth_ctrl_id,
+		time_qual_ptr, timestamp_ptr);
+	return ret;
+}
+
+#endif
 
 #define ETHIF_STOP_SEC_CODE
 #include "ethif_memmap.h"

@@ -1,7 +1,7 @@
 from func_module.validation.common.basic_rule import BasicRule, timing_decorator
 from durable.lang import *
 from durable.engine import *
-from sockets.config_plug_in.validation.rules.TcpIp_utils import TcpIpRuleUtils
+from .TcpIp_utils import TcpIpRuleUtils
 
 
 # TcpIpDefaultRoute 易错校验

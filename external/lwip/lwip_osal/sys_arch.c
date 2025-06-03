@@ -75,7 +75,7 @@ FUNC(void, TCPIP_CODE) sys_arch_msleep(u32_t delay_ms)
 {
 	TickType_t delay_ticks = delay_ms / portTICK_PERIOD_MS;
 
-	vTaskDelay(delay_ticks);
+	// vTaskDelay(delay_ticks);
 }
 
 FUNC(err_t, TCPIP_CODE) sys_mbox_new(sys_mbox_t *mbox, int size)
@@ -240,7 +240,7 @@ FUNC(err_t, TCPIP_CODE) sys_mutex_new(sys_mutex_t *mutex)
 {
 	LWIP_ASSERT("mutex != NULL", mutex != NULL);
 
-	if (nxmutex_init(mutex) != 0) {
+	if (nxrmutex_init(mutex) != 0) {
 		LWIP_ASSERT("OSMutexCreate ", mutex != NULL);
 		/* printf("sys_mutex_new failed\n"); */
 		return ERR_MEM;
@@ -261,9 +261,9 @@ FUNC(void, TCPIP_CODE) sys_mutex_lock(sys_mutex_t *mutex)
 		return;
 	} else {
 #ifndef LWIP_NOASSERT
-		ret = nxmutex_lock(mutex);
+		ret = nxrmutex_lock(mutex);
 #else
-		(void)nxmutex_lock(mutex);
+		(void)nxrmutex_lock(mutex);
 #endif
 	}
 #ifndef LWIP_NOASSERT
@@ -284,9 +284,9 @@ FUNC(void, TCPIP_CODE) sys_mutex_unlock(sys_mutex_t *mutex)
 		return;
 	} else {
 #ifndef LWIP_NOASSERT
-		ret = nxmutex_unlock(mutex);
+		ret = nxrmutex_unlock(mutex);
 #else
-		(void)nxmutex_unlock(mutex);
+		(void)nxrmutex_unlock(mutex);
 #endif
 	}
 #ifndef LWIP_NOASSERT
@@ -300,7 +300,7 @@ FUNC(void, TCPIP_CODE) sys_mutex_free(sys_mutex_t *mutex)
 	LWIP_ASSERT("mutex != NULL", mutex != NULL);
 	LWIP_ASSERT("*mutex != NULL", *mutex != NULL);
 
-	(void)nxmutex_destroy(mutex);
+	(void)nxrmutex_destroy(mutex);
 	mutex = NULL;
 }
 

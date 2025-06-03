@@ -13,10 +13,8 @@
 #  * limitations under the License.
 #  */
 import importlib
-from eth.config_plug_in.validation.rules.EthIf_utils import EthIfRuleUtils
+from .EthIf_utils import EthIfRuleUtils
 from func_module.validation.common.validation_def import ValidationData, ExceptionRuleLog
-from eth.config_plug_in.validation.rules.EthIf016002 import EthIf016002Rule
-from eth.config_plug_in.validation.rules.EthIf016004 import EthIf016004Rule
 
 VALIDATE_MARK_LIST = [
     "016002", "016004",
@@ -33,7 +31,7 @@ class EthIfRule():
         EthIfRuleUtils().set_ethif_target(validation_data.sys_info_class.target)
         EthIfRuleUtils().set_mcal_gendata_path(validation_data.sys_info_class.mcal_gendata_path)
         for validate_code in VALIDATE_MARK_LIST:
-            validate_rule_package = importlib.import_module(f'eth.config_plug_in.validation.rules.EthIf{validate_code}')
+            validate_rule_package = importlib.import_module(f'.EthIf{validate_code}', __package__)
             validate_rule_class = getattr(validate_rule_package, f'EthIf{validate_code}Rule')
             try:
                 bsw_module_rule_obj = validate_rule_class(self.logs, bsw_ecuc_cfg_class_dict)

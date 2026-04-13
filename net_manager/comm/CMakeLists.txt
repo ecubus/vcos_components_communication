@@ -104,6 +104,10 @@ if(CONFIG_MODULE_COMM)
         list(APPEND INCLUDE_DIR
             ${CAN_STACK_E3XX_DIR}
         )
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        list(APPEND INCLUDE_DIR
+            ${CAN_STACK_FC7300F8MDT_DIR}
+        )
     endif()
 
     # 合并所有源文件
@@ -124,5 +128,7 @@ if(CONFIG_MODULE_COMM)
         target_link_libraries(net_comm PRIVATE e3_can_driver)
     elseif(CONFIG_ARCH_CHIP_J6E)
         target_link_libraries(net_comm PRIVATE j6_can_driver)
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        target_link_libraries(net_comm PRIVATE fc7300f8mdt_can_driver)
     endif()
 endif()

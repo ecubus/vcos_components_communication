@@ -46,6 +46,10 @@ if(CONFIG_MODULE_COM)
         list(APPEND INCLUDE_DIR
             ${CAN_STACK_E3XX_DIR}
         )
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        list(APPEND INCLUDE_DIR
+            ${CAN_STACK_FC7300F8MDT_DIR}
+        )
     endif()
 
     # 收集 Com 目录下的所需 .c 文件
@@ -71,5 +75,7 @@ if(CONFIG_MODULE_COM)
         target_link_libraries(rt_com PRIVATE e3_can_driver)
     elseif(CONFIG_ARCH_CHIP_J6E)
         target_link_libraries(rt_com PRIVATE j6_can_driver)
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        target_link_libraries(rt_com PRIVATE fc7300f8mdt_can_driver)
     endif()
 endif()

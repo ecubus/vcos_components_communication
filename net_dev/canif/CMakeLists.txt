@@ -158,6 +158,10 @@ if(CONFIG_MODULE_CANIF)
         list(APPEND INCLUDE_DIR
             ${CAN_STACK_J6E_DIR}
         )
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        list(APPEND INCLUDE_DIR
+            ${CAN_STACK_FC7300F8MDT_DIR}
+        )
     endif()
     # 收集 CanIf 目录下的所需 .c 文件
     file(GLOB CANIF_SOURCES
@@ -183,5 +187,7 @@ if(CONFIG_MODULE_CANIF)
         target_link_libraries(can_canif PRIVATE e3_can_driver)
     elseif(CONFIG_ARCH_CHIP_J6E)
         target_link_libraries(can_canif PRIVATE j6_can_driver)
+    elseif(CONFIG_ARCH_CHIP_FC7300F8MDT)
+        target_link_libraries(can_canif PRIVATE fc7300f8mdt_can_driver)
     endif()
 endif()

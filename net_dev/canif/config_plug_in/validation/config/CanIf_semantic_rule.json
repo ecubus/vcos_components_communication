@@ -475,11 +475,15 @@
         "rule_ruleset": {
             "ruleset_01": {
                 "condition": {
-                    "mod_path": ["/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduUserRxCalloutName"],
+                    "mod_path": [
+                        "/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfRxPduCfg/CanIfRxPduUserRxCalloutName"
+                    ],
                     "judge_expression": "%0 != None and %0 != ''"
                 },
                 "judgement": {
-                    "mod_path": ["/AUTOSAR/EcucDefs/CanIf/CanIfPublicCfg/CanIfPublicUserCbkHeaderFile"],
+                    "mod_path": [
+                        "/AUTOSAR/EcucDefs/CanIf/CanIfPublicCfg/CanIfPublicUserCbkHeaderFile"
+                    ],
                     "judge_expression": "%0 != [] and %0 != None and %0 != ''"
                 }
             }
@@ -493,11 +497,15 @@
         "rule_ruleset": {
             "ruleset_01": {
                 "condition": {
-                    "mod_path": ["/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduUserTxCalloutName"],
+                    "mod_path": [
+                        "/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfTxPduCfg/CanIfTxPduUserTxCalloutName"
+                    ],
                     "judge_expression": "%0 != None and %0 != ''"
                 },
                 "judgement": {
-                    "mod_path": ["/AUTOSAR/EcucDefs/CanIf/CanIfPublicCfg/CanIfPublicUserCbkHeaderFile"],
+                    "mod_path": [
+                        "/AUTOSAR/EcucDefs/CanIf/CanIfPublicCfg/CanIfPublicUserCbkHeaderFile"
+                    ],
                     "judge_expression": "%0 != [] and %0 != None and %0 != ''"
                 }
             }
@@ -507,7 +515,7 @@
         "rule_name": "CANIF015006",
         "rule_type": "same_container_linkage_check",
         "rule_summary": "The check of CanIfTxPduUserTxConfirmationUL.",
-        "rule_message": "The value of CanIfTxPduUserTxConfirmationUL can not be 'NONE' or empty.",
+        "rule_message": "CanIfTxPduUserTxConfirmationUL must be set (not NONE/empty). For COM-routed Tx PDUs use PDUR; otherwise CAN_NM/CAN_TP/CDD/XCP as appropriate.",
         "rule_ruleset": {
             "ruleset_01": {
                 "base_path": "/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfTxPduCfg",
@@ -532,13 +540,16 @@
                     }
                 ]
             }
-        }
+        },
+        "manual_solve_list": [
+            "Set CanIfTxPduUserTxConfirmationUL to PDUR for COM Tx PDUs (required)."
+        ]
     },
     "CANIF015007": {
         "rule_name": "CANIF015007",
         "rule_type": "same_container_linkage_check",
         "rule_summary": "The check of CanIfRxPduUserRxIndicationUL.",
-        "rule_message": "The value of CanIfRxPduUserRxIndicationUL can not be 'NONE' or empty.",
+        "rule_message": "CanIfRxPduUserRxIndicationUL must be set (not NONE/empty). For COM-routed Rx PDUs use PDUR; otherwise CAN_NM/CAN_TP/CDD/XCP as appropriate.",
         "rule_ruleset": {
             "ruleset_01": {
                 "base_path": "/AUTOSAR/EcucDefs/CanIf/CanIfInitCfg/CanIfRxPduCfg",
@@ -563,6 +574,9 @@
                     }
                 ]
             }
-        }
+        },
+        "manual_solve_list": [
+            "Set CanIfRxPduUserRxIndicationUL to PDUR for COM Rx PDUs (required)."
+        ]
     }
 }

@@ -27,7 +27,7 @@ class CanIf013014Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "Check if canifctrl and canctrl match."
+        self.validation_summary = "CanIf Ctrl shortName must equal CanController shortName (1:1 by name)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -101,13 +101,15 @@ class CanIf013014Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All canifctrlCfg is valid.",    \
-                        f"/AUTOSAR/EcucDefs/CanIf/CanIfCtrlDrvCfg/{test_dict['name_cur']}", "pass")
+                self.vlog(self.validation_code, self.validation_summary, "CanIfCtrlCfg shortNames match CanControllers.",    \
+                        f"/ActiveEcuC/CanIf/CanIfCtrlDrvCfg/{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"The mapping of CanController {test_dict['name_cur']} in the CanIf layer is missing. The configuration of the CanIfCtrlCfg(s) should be checked.",
-                        "/AUTOSAR/EcucDefs/CanIf/CanIfCtrlDrvCfg/" + f"{test_dict['name_cur']}",
-                        "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfCtrlCfg shortName must equal CanController shortName. Missing CanIfCtrlCfg named '{test_dict['name_cur']}' for Can/CanConfigSet/{test_dict['name_cur']}. Create CanIfCtrlCfg with that shortName under CanIfCtrlDrvCfg.",
+                        "/ActiveEcuC/CanIf/CanIfCtrlDrvCfg",
+                        "fail",
+                        [],
+                        [f"Add CanIfCtrlCfg shortName={test_dict['name_cur']} under CanIf/CanIfCtrlDrvCfg (must match CanController name)."])
 
         # 以canctrlcfgs为基准，canifctrlcfgs多余的container
         more_list = []
@@ -138,12 +140,15 @@ class CanIf013014Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All canifctrlCfg is valid.",
-                        f"/AUTOSAR/EcucDefs/CanIf/CanIfCtrlDrvCfg/" + f"{test_dict['name_cur']}", "pass")
+                self.vlog(self.validation_code, self.validation_summary, "CanIfCtrlCfg shortNames match CanControllers.",
+                        f"/ActiveEcuC/CanIf/CanIfCtrlDrvCfg/{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"There are more CanIfCtrlCfg(s) mappings in the CanIf layer than there are CanController(s) for the MCAL CAN Driver.", \
-                        "/AUTOSAR/EcucDefs/CanIf/CanIfCtrlDrvCfg/" + f"{test_dict['name_cur']}", "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfCtrlCfg '{test_dict['name_cur']}' has no matching CanController. Rename this CanIfCtrlCfg to a CanController shortName, or add/rename Can/CanConfigSet/{test_dict['name_cur']}.",
+                        f"/ActiveEcuC/CanIf/CanIfCtrlDrvCfg/{test_dict['name_cur']}",
+                        "fail",
+                        [],
+                        [f"Rename or remove CanIfCtrlCfg '{test_dict['name_cur']}' so shortNames match CanControllers 1:1."])
 
 
 

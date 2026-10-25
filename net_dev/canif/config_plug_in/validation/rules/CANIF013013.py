@@ -27,7 +27,7 @@ class CanIf013013Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "Check if canifhth and canhth match."
+        self.validation_summary = "CanIf Hth shortName must equal Can TRANSMIT HardwareObject shortName (1:1 by name)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -101,13 +101,15 @@ class CanIf013013Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHthCfg is same as Tx CanHardwareObject.",
+                self.vlog(self.validation_code, self.validation_summary, "CanIfHthCfg shortNames match Can TRANSMIT HardwareObjects.",
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", "pass")
             else:
                 self.vlog(self.validation_code, self.validation_summary,
-                        f"The mapping of CanHardwareObject(Tx) {test_dict['name_cur']} in the CanIf layer is missing. The configuration of the CanIfInitHthCfg(s) should be checked.", \
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", \
-                        "fail")
+                        f"CanIfHthCfg shortName must equal Can TRANSMIT HardwareObject shortName. Missing CanIfHthCfg named '{test_dict['name_cur']}' for Can/CanConfigSet/{test_dict['name_cur']}. Create CanIfHthCfg with that shortName under CanIfInitHohCfg.",
+                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg",
+                        "fail",
+                        [],
+                        [f"Add CanIfHthCfg shortName={test_dict['name_cur']} under CanIf/CanIfInitCfg/CanIfInitHohCfg/<HohRow>/CanIfHthCfg (must match Can TRANSMIT HO)."])
 
         # 以canhthcfg为基准，canifhthcfg 多余的container
         more_list = []
@@ -138,12 +140,15 @@ class CanIf013013Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHthCfg is same as Tx CanHardwareObject.",
+                self.vlog(self.validation_code, self.validation_summary, "CanIfHthCfg shortNames match Can TRANSMIT HardwareObjects.",
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"There are more CanIfInitHthCfg(s) mappings in the CanIf layer than there are CanHardwareObject(s) for the MCAL CAN Driver.", \
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfHthCfg '{test_dict['name_cur']}' has no matching Can TRANSMIT HardwareObject. Rename this CanIfHthCfg to a Can HO shortName, or add/rename Can/CanConfigSet/{test_dict['name_cur']} as TRANSMIT.",
+                        f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/{test_dict['name_cur']}",
+                        "fail",
+                        [],
+                        [f"Rename or remove CanIfHthCfg '{test_dict['name_cur']}' so shortNames match Can TRANSMIT HardwareObjects 1:1."])
 
 
     def add_rule_time(self):

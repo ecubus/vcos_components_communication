@@ -28,7 +28,7 @@ class PduR016001Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "PduRDestPduDataProvision should be set to PDUR_TRIGGERTRANSMIT!"
+        self.validation_summary = "CanNm Tx dest PDUs must use PduRDestPduDataProvision=PDUR_TRIGGERTRANSMIT (DIRECT is wrong for CanNm)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -93,13 +93,18 @@ class PduR016001Rule(BasicRule):
                 if valid:
                     self.vlog(
                       self.validation_code, self.validation_summary,
-                      f"PduRDestPduDataProvision[{pdurdestpdudataprovision}] should be set to PDUR_TRIGGERTRANSMIT!",
+                      f"Dest PDU {name} refs CanNm Tx ({pdurdestpduref_path}): PduRDestPduDataProvision is {pdurdestpdudataprovision}; set to PDUR_TRIGGERTRANSMIT (not PDUR_DIRECT).",
                       service_id_path, "pass")
                 else:
                     self.vlog(
                       self.validation_code, self.validation_summary,
-                      f"PduRDestPduDataProvision[{pdurdestpdudataprovision}] should be set to PDUR_TRIGGERTRANSMIT!",
-                      service_id_path, "fail")
+                      f"Dest PDU {name} refs CanNm Tx ({pdurdestpduref_path}): PduRDestPduDataProvision is {pdurdestpdudataprovision}; set to PDUR_TRIGGERTRANSMIT (not PDUR_DIRECT).",
+                      service_id_path, "fail",
+                      [{"solve_info": f"Set {service_id_path}/PduRDestPduDataProvision to PDUR_TRIGGERTRANSMIT.",
+                        "solve_type": "SetValue",
+                        "parameter": service_id_path + "/PduRDestPduDataProvision",
+                        "value": "PDUR_TRIGGERTRANSMIT"}],
+                      [f"Set PduRDestPduDataProvision at {service_id_path} to PDUR_TRIGGERTRANSMIT."])
                 # 3）清空ruleset中的所有fact，为下一次校验做准备
                 if len(validation_data_list) > 0:
                     retract_facts(self.__class__.ruleset_name, validation_data_list)

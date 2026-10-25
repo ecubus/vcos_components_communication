@@ -76,17 +76,12 @@ class PduR016001Rule(BasicRule):
                 continue
             pdurdestpduref_path = pdurdestpdu["PduRDestPduRef"]["ValueRef"]
             service_id_path = "/ActiveEcuC/PduR/" + PduRRoutingPaths_Name + "/PduRDestPdu/" + name
-            # Missing enum must FAIL clearly (never KeyError / rule exception).
+            # BSWMD OPT + DEFAULT-VALUE=PDUR_DIRECT — missing is not FAIL; apply default for semantic check.
             _prov_node = pdurdestpdu.get("PduRDestPduDataProvision")
-            if not isinstance(_prov_node, dict) or _prov_node.get("Value") is None or str(_prov_node.get("Value")).strip() == "":
-                valid = False
-                self.vlog(
-                  self.validation_code, self.validation_summary,
-                  f"PduRDestPdu[{name}] missing PduRDestPduDataProvision "
-                  f"(must configure PDUR_DIRECT or PDUR_TRIGGERTRANSMIT)!",
-                  service_id_path, "fail")
-                continue
-            pdurdestpdudataprovision = _prov_node["Value"]
+            if isinstance(_prov_node, dict) and _prov_node.get("Value") is not None and str(_prov_node.get("Value")).strip() != "":
+                pdurdestpdudataprovision = _prov_node["Value"]
+            else:
+                pdurdestpdudataprovision = "PDUR_DIRECT"
             # ignore: lin diagnostic frames
             if "MasterReq" in pdurdestpduref_path or "SlaveResp" in pdurdestpduref_path:
                 continue

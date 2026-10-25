@@ -47,7 +47,15 @@ def get_template_input_parameter_dict(config_dict: dict, config_dict_rte: dict) 
                     return default
                 v = node.get("Value")
                 return default if v is None or v == "" else v
-            cansm_general_dict["CanSMDevErrorDetect"] = change_boolean(_opt(value1, "CanSMDevErrorDetect", False))
+            # CanSMDevErrorDetect is BSWMD required (lower=1) — CanSM016002 FAILs if missing.
+            # Do not invent False here.
+            _ded = value1.get("CanSMDevErrorDetect")
+            if not isinstance(_ded, dict) or _ded.get("Value") is None or _ded.get("Value") == "":
+                raise ValueError(
+                    "CanSMGeneral missing CanSMDevErrorDetect "
+                    "(BSWMD required; configure it — verify CanSM016002)"
+                )
+            cansm_general_dict["CanSMDevErrorDetect"] = change_boolean(_ded["Value"])
             _bb = _opt(value1, "BusOffBeginFunction", "")
             _be = _opt(value1, "BusOffEndFunction", "")
             cansm_general_dict["BusOffBeginSupport"] = "STD_OFF" if _bb == "" else "STD_ON"

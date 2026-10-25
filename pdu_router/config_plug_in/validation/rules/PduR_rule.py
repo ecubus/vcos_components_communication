@@ -17,7 +17,7 @@ import importlib
 from func_module.health_monitor.logger import logger
 from func_module.validation.common.validation_def import ValidationData, ExceptionRuleLog
 
-VALIDATE_MARK_LIST = ["016001", "016003", "016005", "016006", "016008", "016009", "016010", "016011"]
+VALIDATE_MARK_LIST = ["016001", "016003", "016005", "016006", "016008", "016009", "016010"]
 
 class PduRRule():
 

@@ -962,9 +962,19 @@ def handle_message_periodic(ComConfig: dict, IPdu: str, coreId):
         mdt = _com_num_value(tx_ipdu, 'ComMinimumDelayTime', 0.0) * 1000
         _com_set_num_value(tx_ipdu, 'ComMinimumDelayTime', int(mdt / ComIPduTxTimeBase))
 
-        # Only touch ComTxModeFalse when already present — do not invent (COM013008).
+        # ComTxModeFalse: BSWMD OPT / only required with TMS (COM013008).
+        # When absent (no TMS), mirror True into False so pbcfg false_cfg[] has a slot
+        # (same mode both sides) — codegen alias, not inventing a distinct False mode.
         modes_for_reps = [mode_true]
         mode_false = _com_tx_mode_body(tx_ipdu, 'ComTxModeFalse')
+        if mode_false is None and isinstance(tx_ipdu.get('ComTxModeTrue'), dict):
+            tx_ipdu['ComTxModeFalse'] = copy.deepcopy(tx_ipdu['ComTxModeTrue'])
+            # Retarget DefinitionRef suffix if present
+            false_wrap = tx_ipdu['ComTxModeFalse']
+            if isinstance(false_wrap.get('DefinitionRef'), str):
+                false_wrap['DefinitionRef'] = false_wrap['DefinitionRef'].replace(
+                    'ComTxModeTrue', 'ComTxModeFalse')
+            mode_false = _com_tx_mode_body(tx_ipdu, 'ComTxModeFalse')
         if mode_false is not None:
             for key in ('ComTxModeTimePeriod', 'ComTxModeTimeOffset', 'ComTxModeRepetitionPeriod'):
                 ms = _com_num_value(mode_false, key, 0.0) * 1000

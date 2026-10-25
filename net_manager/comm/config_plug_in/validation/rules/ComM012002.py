@@ -18,7 +18,7 @@ from durable.lang import *
 from durable.engine import *
 
 
-# ComM NetworkManagement 动态配置项缺失
+# ComM NetworkManagement 动态配置项缺失 (ECUC_ComM_00607: ComMNetworkManagement [1..1])
 class ComM012002Rule(BasicRule):
     ruleset_name = "ComM012002"
     validation_result = False
@@ -28,6 +28,11 @@ class ComM012002Rule(BasicRule):
         self.logs = logs
         self.bsw_dict = bsw_dict
         self.comm_dict = comm_dict
+        self.validation_code = self.__class__.ruleset_name
+        self.validation_summary = (
+            "Each ComMChannel must have ComMNetworkManagement (ECUC_ComM_00607 [1..1]) "
+            "with ComMNmVariant and ComMPncNmRequest."
+        )
 
         self.durable_init()
 
@@ -65,12 +70,17 @@ class ComM012002Rule(BasicRule):
                 continue
             if 'ComMChannel' == channel_value['DefinitionRef'].split('/')[-1]:
                 channel_path = base_path + '/' + channel_key
+                nm_path = channel_path + '/ComMNetworkManagement'
                 validataion_data_path = channel_path
 
                 validation_data['channel'] = channel_key
-                if 'ComMNetworkManagement' in channel_value:
-                    # validataion_data_path = channel_path + '/ComMNetworkManagement/ComMNmVariant'
-                    validation_data['management'] = channel_value['ComMNetworkManagement']['ComMNmVariant']['Value']
+                nm_container = channel_value.get('ComMNetworkManagement')
+                if isinstance(nm_container, dict):
+                    validataion_data_path = nm_path
+                    nm_variant = (nm_container.get('ComMNmVariant') or {}).get('Value')
+                    if nm_variant is not None:
+                        validation_data['management'] = nm_variant
+                    # else: container present but ComMNmVariant missing → still fail below
 
                 # 2） 开始校验
                 try:
@@ -81,13 +91,33 @@ class ComM012002Rule(BasicRule):
 
                 # 3） 打印日志
                 if self.__class__.validation_result:
-                    self.vlog("COMM012002", "ComM Channel is defined, ComMNetworkManagement should be defined.",
-                              f"{channel_key} ComM Channel & NetworkManagement Missing Check Success.",
+                    self.vlog(self.validation_code, self.validation_summary,
+                              f"{channel_key}: ComMNetworkManagement present with ComMNmVariant.",
                               validataion_data_path, "pass")
                 else:
-                    self.vlog("COMM012002", "ComM Channel is defined, ComMNetworkManagement should be defined.",
-                              f"{channel_key} ComM Channel is defined, ComMNetworkManagement should be defined.",
-                              validataion_data_path, "fail")
+                    missing_detail = (
+                        "ComMNetworkManagement container is missing"
+                        if not isinstance(nm_container, dict)
+                        else "ComMNetworkManagement exists but ComMNmVariant is unset"
+                    )
+                    self.vlog(
+                        self.validation_code, self.validation_summary,
+                        (
+                            f"{channel_key}: {missing_detail}. "
+                            f"Create container ComMNetworkManagement under {channel_path} "
+                            f"(BSWMD ECUC_ComM_00607 [1..1]), then set "
+                            f"ComMNmVariant (FULL|LIGHT|NONE|LINSLAVE; DEFAULT=FULL) and "
+                            f"ComMPncNmRequest (boolean; DEFAULT=false)."
+                        ),
+                        nm_path,
+                        "fail",
+                        [],
+                        [
+                            f"Add ComMNetworkManagement under {channel_path}; "
+                            f"set {nm_path}/ComMNmVariant=FULL (or LIGHT/NONE as needed) and "
+                            f"{nm_path}/ComMPncNmRequest=false unless PNC Nm request is required."
+                        ],
+                    )
                     valid = False
 
                 retract_facts(self.__class__.ruleset_name, validation_data)

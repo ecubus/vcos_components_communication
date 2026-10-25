@@ -28,6 +28,11 @@ class ComM012001Rule(BasicRule):
         self.logs = logs
         self.bsw_dict = bsw_dict
         self.comm_dict = comm_dict
+        self.validation_code = self.__class__.ruleset_name
+        self.validation_summary = (
+            "Each ComMChannel must have at least one ComMUserPerChannel "
+            "with ComMUserChannel ref."
+        )
 
         self.durable_init()
 
@@ -84,13 +89,25 @@ class ComM012001Rule(BasicRule):
 
                 # 3） 打印日志
                 if self.__class__.validation_result:
-                    self.vlog("COMM012001", "ComM Channel is defined, ComM User should be defined.",
-                              f"{channel_key} ComM Channel & User Missing Check Success.",
+                    self.vlog(self.validation_code, self.validation_summary,
+                              f"{channel_key}: ComMUserPerChannel present.",
                               validataion_data_path, "pass")
                 else:
-                    self.vlog("COMM012001", "ComM Channel is defined, ComM User should be defined.",
-                              f"{channel_key} ComM Channel is defined, ComM User should be defined.",
-                              validataion_data_path, "fail")
+                    self.vlog(
+                        self.validation_code, self.validation_summary,
+                        (
+                            f"{channel_key}: missing ComMUserPerChannel/ComMUserChannel. "
+                            f"Under {channel_path} add ComMUserPerChannel row and set "
+                            f"ComMUserChannel to a ComMUser (e.g. /ActiveEcuC/ComM/<User>)."
+                        ),
+                        channel_path,
+                        "fail",
+                        [],
+                        [
+                            f"Create ComMUserPerChannel under {channel_path} and set "
+                            f"ComMUserChannel ValueRef to an existing ComMUser."
+                        ],
+                    )
                     valid = False
 
                 retract_facts(self.__class__.ruleset_name, validation_data)

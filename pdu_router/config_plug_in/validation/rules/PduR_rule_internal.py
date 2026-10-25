@@ -196,7 +196,14 @@ class PduRRule():
             if not AutosarUtil.get_by_path_from_dict(pdurdestpdu, "/PduRDestPduRef/ValueRef"):
                 continue
             pdurdestpduref_path = pdurdestpdu["PduRDestPduRef"]["ValueRef"]
-            pdurdestpdudataprovision = pdurdestpdu["PduRDestPduDataProvision"]["Value"]
+            _prov_node = pdurdestpdu.get("PduRDestPduDataProvision")
+            if not isinstance(_prov_node, dict) or _prov_node.get("Value") is None or str(_prov_node.get("Value")).strip() == "":
+                valid = False and valid
+                self.log += ("PduRDestPduDataProvision missing in "
+                             "ActiveEcuC/PduR/PduRRoutingPaths/PduRDestPdu/{}!
+".format(name))
+                return valid
+            pdurdestpdudataprovision = _prov_node["Value"]
             # ignore: lin diagnostic frames
             if "MasterReq" in pdurdestpduref_path or "SlaveResp" in pdurdestpduref_path:
                 continue

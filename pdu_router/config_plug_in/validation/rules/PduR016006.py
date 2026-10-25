@@ -184,6 +184,15 @@ def find_dst_pdu_container_by_value_ref(valueRefList: list, routingpath: dict):
 
 def extract_module_from_ecuc_pdu_ref(valueRef: str, direction: str) -> str:
     ModName = ''
+    # Local fix: PDU names that do not follow Studio's "<name>_o<Module>_<Dir>" convention
+    # (e.g. DBC frame names like "ECU_Status") have too few '_' segments; treat them as IF PDUs
+    # instead of raising IndexError.
+    if not isinstance(valueRef, str):
+        return False
+    _short = valueRef.split('/')[-1]
+    _need = 3 if direction == 'Src' else 2
+    if len(valueRef.split('_')) < 2 or len(_short.split('_')) < _need:
+        return False
     if direction == 'Src':
         if valueRef.split('_')[1] == 'MasterReq':
             ModName = 'LINTP'

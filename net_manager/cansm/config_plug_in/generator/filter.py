@@ -41,14 +41,22 @@ def get_template_input_parameter_dict(config_dict: dict, config_dict_rte: dict) 
         if key1 == "DefinitionRef":
             continue
         if get_name(value1["DefinitionRef"]) == "CanSMGeneral":
-            cansm_general_dict["CanSMDevErrorDetect"] = change_boolean(value1["CanSMDevErrorDetect"]["Value"])
-            cansm_general_dict["BusOffBeginSupport"] = "STD_OFF" if value1["BusOffBeginFunction"]["Value"] == "" or value1["BusOffBeginFunction"]["Value"] == None else "STD_ON"
-            cansm_general_dict["BusOffEndSupport"] = "STD_OFF" if value1["BusOffEndFunction"]["Value"] == "" or value1["BusOffEndFunction"]["Value"] == None else "STD_ON"
-            cansm_general_dict["BusOffBeginFunction"] = value1["BusOffBeginFunction"]["Value"]
-            cansm_general_dict["BusOffEndFunction"] = value1["BusOffEndFunction"]["Value"]
-            cansm_general_dict["SpinlockRetryCounter"] = "255" if value1["CanSMSpinlockRetryCounter"]["Value"] == "" or value1["CanSMSpinlockRetryCounter"]["Value"] == None else value1["CanSMSpinlockRetryCounter"]["Value"]
-            cansm_general_dict["CanSMInitFastExecuteThreshold"] = "3" if value1["CanSMInitFastExecuteThreshold"]["Value"] == "" or value1["CanSMInitFastExecuteThreshold"]["Value"] == None else value1["CanSMInitFastExecuteThreshold"]["Value"]
-            cansm_general_dict["CanSMMainFuncFastExecuteThreshold"] = "3" if value1["CanSMMainFuncFastExecuteThreshold"]["Value"] == "" or value1["CanSMMainFuncFastExecuteThreshold"]["Value"] == None else value1["CanSMMainFuncFastExecuteThreshold"]["Value"]
+            def _opt(d, key, default=""):
+                node = d.get(key) if isinstance(d, dict) else None
+                if not isinstance(node, dict):
+                    return default
+                v = node.get("Value")
+                return default if v is None or v == "" else v
+            cansm_general_dict["CanSMDevErrorDetect"] = change_boolean(_opt(value1, "CanSMDevErrorDetect", False))
+            _bb = _opt(value1, "BusOffBeginFunction", "")
+            _be = _opt(value1, "BusOffEndFunction", "")
+            cansm_general_dict["BusOffBeginSupport"] = "STD_OFF" if _bb == "" else "STD_ON"
+            cansm_general_dict["BusOffEndSupport"] = "STD_OFF" if _be == "" else "STD_ON"
+            cansm_general_dict["BusOffBeginFunction"] = _bb
+            cansm_general_dict["BusOffEndFunction"] = _be
+            cansm_general_dict["SpinlockRetryCounter"] = _opt(value1, "CanSMSpinlockRetryCounter", "255")
+            cansm_general_dict["CanSMInitFastExecuteThreshold"] = _opt(value1, "CanSMInitFastExecuteThreshold", "3")
+            cansm_general_dict["CanSMMainFuncFastExecuteThreshold"] = _opt(value1, "CanSMMainFuncFastExecuteThreshold", "3")
         if get_name(value1["DefinitionRef"]) == "CanSMConfiguration":
             cansm_general_dict["CanSMModeRequestRepetitionTime"] = int(value1["CanSMModeRequestRepetitionTime"]["Value"] * 1000)
             cansm_general_dict["CanSMModeRequestRepetitionMax"] = value1["CanSMModeRequestRepetitionMax"]["Value"]
@@ -173,7 +181,9 @@ def get_cansm_network(network_input: dict, config_dict: dict) -> dict:
             if value["CanSMControllerId"]["ValueRef"] is not None and value["CanSMControllerId"]["ValueRef"] != '':
                 CtrlName = get_name(value["CanSMControllerId"]["ValueRef"])
                 network["CanSMControllerId"] = "CanIfConf_CanIfCtrlCfg_" + CtrlName
-                CoreRef = canif_ctrl_dict[CtrlName]['CanIfCtrlCoreRef']['ValueRef']
+                # CanIfCtrlCoreRef optional on CanIf ctrl; default core 0
+                _ctrl = canif_ctrl_dict.get(CtrlName) or {}
+                CoreRef = (_ctrl.get('CanIfCtrlCoreRef') or {}).get('ValueRef')
                 if CoreRef is None or CoreRef == '':
                     network['CanCtrlCoreId'] = 0
                 else:

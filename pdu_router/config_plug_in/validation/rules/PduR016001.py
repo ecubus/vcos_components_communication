@@ -75,14 +75,24 @@ class PduR016001Rule(BasicRule):
             if not AutosarUtil.get_by_path_from_dict(pdurdestpdu, "/PduRDestPduRef/ValueRef"):
                 continue
             pdurdestpduref_path = pdurdestpdu["PduRDestPduRef"]["ValueRef"]
-            pdurdestpdudataprovision = pdurdestpdu["PduRDestPduDataProvision"]["Value"]
+            service_id_path = "/ActiveEcuC/PduR/" + PduRRoutingPaths_Name + "/PduRDestPdu/" + name
+            # Missing enum must FAIL clearly (never KeyError / rule exception).
+            _prov_node = pdurdestpdu.get("PduRDestPduDataProvision")
+            if not isinstance(_prov_node, dict) or _prov_node.get("Value") is None or str(_prov_node.get("Value")).strip() == "":
+                valid = False
+                self.vlog(
+                  self.validation_code, self.validation_summary,
+                  f"PduRDestPdu[{name}] missing PduRDestPduDataProvision "
+                  f"(must configure PDUR_DIRECT or PDUR_TRIGGERTRANSMIT)!",
+                  service_id_path, "fail")
+                continue
+            pdurdestpdudataprovision = _prov_node["Value"]
             # ignore: lin diagnostic frames
             if "MasterReq" in pdurdestpduref_path or "SlaveResp" in pdurdestpduref_path:
                 continue
             if "Com_CanNm_Tx" in pdurdestpduref_path and pdurdestpdudataprovision == "PDUR_DIRECT":
                 valid = False
                 validation_data_list = []
-                service_id_path = "/ActiveEcuC/PduR/" + PduRRoutingPaths_Name + "/PduRDestPdu/" + name
                 # 2） 开始校验
                 # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
                 if valid:

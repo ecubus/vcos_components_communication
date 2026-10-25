@@ -63,32 +63,49 @@ class Com013001Rule(BasicRule):
             return False
         return True
 
+    @staticmethod
+    def _signal_init_value(ComConfig, signal):
+        """BSWMD lowerMultiplicity=0; omitted leaf defaults to 0 (AUTOSAR all-zero init).
+        Never KeyError — treat missing/empty as 0 so verify emits typed FAIL not exception.
+        """
+        node = ComConfig["ComSignals"][signal].get("ComSignalInitValue")
+        if not isinstance(node, dict):
+            return 0
+        val = node.get("Value")
+        if val is None or val == "":
+            return 0
+        try:
+            return int(val)
+        except (TypeError, ValueError):
+            # Non-numeric (e.g. UINT8_N blank-separated) — size check below skips init bound
+            return 0
+
     def check_basic_type(self, ComConfig, signal, signal_type, signal_size):
         '''
         常见的类型有boolean sint8 sint16 sint32 sint64 uint8 uint16 uint32 uint64 float16 float32 float64
         UINT8_N这种signal的数组样式也支持
-        struct 暂不支持        
+        struct 暂不支持
         '''
         check_result = 0
         sig_initValue = 0
         if signal_type == "BOOLEAN":
-            sig_initValue = int(ComConfig["ComSignals"][signal]["ComSignalInitValue"]["Value"])
+            sig_initValue = self._signal_init_value(ComConfig, signal)
             if signal_size > 1 or sig_initValue > 1:
                 check_result = -1
         elif signal_type == "UINT8" or signal_type == "SINT8":
-            sig_initValue = int(ComConfig["ComSignals"][signal]["ComSignalInitValue"]["Value"])
+            sig_initValue = self._signal_init_value(ComConfig, signal)
             if signal_size > 8 or signal_size <= 1 or sig_initValue > 0xFF:
                 check_result = -1
         elif signal_type == "UINT16" or signal_type == "SINT16":
-            sig_initValue = int(ComConfig["ComSignals"][signal]["ComSignalInitValue"]["Value"])
+            sig_initValue = self._signal_init_value(ComConfig, signal)
             if signal_size > 16 or signal_size <= 8 or sig_initValue > 0xFFFF:
                 check_result = -1
         elif signal_type == "UINT32" or signal_type == "SINT32" or signal_type == "FLOAT32":
-            sig_initValue = int(ComConfig["ComSignals"][signal]["ComSignalInitValue"]["Value"])
+            sig_initValue = self._signal_init_value(ComConfig, signal)
             if signal_size > 32 or signal_size <= 16 or sig_initValue > 0xFFFFFFFF:
                 check_result = -1
         elif signal_type == "UINT64" or signal_type == "SINT64" or signal_type == "FLOAT64":
-            sig_initValue = int(ComConfig["ComSignals"][signal]["ComSignalInitValue"]["Value"])
+            sig_initValue = self._signal_init_value(ComConfig, signal)
             if signal_size > 64 or signal_size <= 32 or sig_initValue > 0xFFFFFFFFFFFFFFFF:
                 check_result = -1
         else:

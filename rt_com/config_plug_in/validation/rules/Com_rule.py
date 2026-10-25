@@ -20,7 +20,8 @@ from func_module.validation.common.validation_def import ValidationData, Excepti
 
 VALIDATE_MARK_LIST = [
     "011004",  "011005",  "011006",
-    "011007",  "011009", "013001", "013002", "013006", "013007"
+    "011007",  "011009", "011010", "011011",
+    "013001", "013002", "013006", "013007", "013008", "013009", "013010"
 ]
 
 class ComRule():

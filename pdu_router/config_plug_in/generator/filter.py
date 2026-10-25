@@ -144,12 +144,15 @@ def process_pdur_isr(config_dict: dict):
         if "DefinitionRef" not in item :
             continue
         if item["DefinitionRef"].split('/')[-1] == 'OsApplication':
-            templist = []
-            if isinstance(item['OsAppIsrRef']['ValueRef'], str):
-                templist.append(item['OsAppIsrRef']['ValueRef'])
+            # OsAppIsrRef is optional; apps without ISR refs are fine for single-core PduR.
+            isr_ref = (item.get('OsAppIsrRef') or {}).get('ValueRef')
+            if isr_ref is None or isr_ref == '' or isr_ref == []:
+                continue
+            if isinstance(isr_ref, str):
+                templist = [isr_ref]
             else:
-                templist = item['OsAppIsrRef']['ValueRef']
-            if templist is None or len(templist) == 0:
+                templist = list(isr_ref)
+            if len(templist) == 0:
                 continue
             for pdurIsr in isrlist:
                 for osaIsr in templist:
@@ -246,11 +249,22 @@ def process_pdur_routing_paths(config_dict: dict, PduRRoutingPathGroups: dict) -
     return PduRRoutingPaths, RoutingPathGroupList
 
 def process_pdur_tx_buffer_ref_info(pathItem):
-    RefInfo = pathItem['PduRDestTxBufferRef']['ValueRef']
-    if RefInfo == None:
+    # Optional; AutoC IF routes often omit Tx buffer ref → PDUR_NO_BUFFER
+    node = pathItem.get('PduRDestTxBufferRef')
+    if not isinstance(node, dict):
+        # also accept numbered sibling keys like PduRDestTxBufferRef_0
+        for k, v in pathItem.items():
+            if isinstance(k, str) and k.startswith('PduRDestTxBufferRef') and isinstance(v, dict):
+                node = v
+                break
+    RefInfo = (node or {}).get('ValueRef')
+    if RefInfo is None or RefInfo == '':
         return ''
-    else:
-        return RefInfo.split('/')[-1]
+    if isinstance(RefInfo, list):
+        RefInfo = RefInfo[0] if RefInfo else ''
+    if not RefInfo:
+        return ''
+    return str(RefInfo).split('/')[-1]
 
 def process_pdur_routing_paths_dest_info(routingPath: dict, config_dict: dict, \
         PduRRoutingPathGroups: dict, RoutingPathGroupList: dict) -> dict:
@@ -271,7 +285,7 @@ def process_pdur_routing_paths_dest_info(routingPath: dict, config_dict: dict, \
             if destInfoStruct is None or "DefinitionRef" not in destInfoStruct or \
                 destInfoStruct["DefinitionRef"] != "/AUTOSAR/EcucDefs/PduR/PduRRoutingPaths/PduRDestPdu":
                 continue
-            DestModule, DestPduId, DestPduName = process_dest_info_module_id_name(destInfoStruct)
+            DestModule, DestPduId, DestPduName = process_dest_info_module_id_name(destInfoStruct, ref_str)
             PduRDestPduCore = process_dest_info_core_id(config_dict, destInfoStruct['PduRDestPduRef']['ValueRef'])
             DataProvision = process_dest_info_data_provision_processing(destInfoStruct)
             PduLenStrategy, PduLenInEcuC = process_dest_info_data_len_handling_strategy(destInfoStruct, config_dict)
@@ -291,14 +305,14 @@ def process_pdur_routing_paths_dest_info(routingPath: dict, config_dict: dict, \
             PduRDestPdu[DestPduName] = PduRDestPdu_Value
     return PduRDestPdu, RoutingPathGroupList
 
-def process_dest_info_module_id_name(destInfoStruct):
+def process_dest_info_module_id_name(destInfoStruct, container_path: str = ''):
     ValueRefs = destInfoStruct['PduRDestPduRef']['ValueRef']
     DestModule = "PDUR_"
     DestModule_Temp = ""
     DestPduName_Temp = ""
     if isinstance(ValueRefs, str):
         DestPduName_Temp = ValueRefs.split("/")[-1]
-        DestModule_Temp = extract_module_from_ecuc_pdu_ref(ValueRefs, 'Dest')
+        DestModule_Temp = extract_module_from_pdur_container_name(container_path, 'Dest') or extract_module_from_ecuc_pdu_ref(ValueRefs, 'Dest')
         DestModule += DestModule_Temp
         if DestModule.upper() == "PDUR_DOIP": 
             DestModule += "_TP" # 当前不考虑DoIP_If
@@ -308,7 +322,7 @@ def process_dest_info_module_id_name(destInfoStruct):
     elif isinstance(ValueRefs, list):
         for ref in ValueRefs:
             DestPduName_Temp = ref.split("/")[-1]
-            DestModule_Temp = extract_module_from_ecuc_pdu_ref(ref, "Dest")
+            DestModule_Temp = extract_module_from_pdur_container_name(container_path, 'Dest') or extract_module_from_ecuc_pdu_ref(ref, "Dest")
             DestModule += DestModule_Temp
             if DestModule.upper() == "PDUR_DOIP":
                 DestModule += "_TP" # 当前不考虑DoIP_If
@@ -338,14 +352,17 @@ def process_dest_info_core_id(config_dict, pduRef):
 
 def process_dest_info_data_provision_processing(destInfoStruct):
     DataProvision = "PDUR_DIRECT"
-    if destInfoStruct['PduRDestPduDataProvision']['Value'] is not None:
-        DataProvision = destInfoStruct['PduRDestPduDataProvision']['Value']
+    _prov = (destInfoStruct.get('PduRDestPduDataProvision') or {}).get('Value')
+    if _prov is not None and _prov != '':
+        DataProvision = _prov
     return DataProvision
 
 def process_dest_info_data_len_handling_strategy(destInfoStruct: dict, config_dict: dict):
     PduLenStrategy = "PDUR_STRATEGY_UNUSED"
-    if destInfoStruct['PduRDestPduLengthHandlingStrategy']['Value'] is not None:
-        PduLenStrategy = destInfoStruct['PduRDestPduLengthHandlingStrategy']['Value']
+    # PduRDestPduLengthHandlingStrategy is optional; AutoC may omit → UNUSED
+    _strat = (destInfoStruct.get('PduRDestPduLengthHandlingStrategy') or {}).get('Value')
+    if _strat is not None and _strat != '':
+        PduLenStrategy = _strat
     DestPduRef = destInfoStruct['PduRDestPduRef']['ValueRef']
     DestPduInEcuC = AutosarUtil.get_by_path_from_dict(config_dict["ecuc"]["ArPackages"], DestPduRef[1:])
     DestPduLenInEcuC = DestPduInEcuC['PduLength']['Value']
@@ -408,9 +425,10 @@ def process_pdur_routing_paths_src_info(name: str, dict: dict, config_dict: dict
                 continue
             SrcModule = "PDUR_"
             SrcModule_Temp = ""
+            _src_container = item.get('ValueRef') or ''
             if isinstance(srcInfoStruct['PduRSrcPduRef']['ValueRef'], str):
                 SrcPduName_Temp = srcInfoStruct['PduRSrcPduRef']['ValueRef'].split("/")[-1]
-                SrcModule_Temp = extract_module_from_ecuc_pdu_ref(srcInfoStruct['PduRSrcPduRef']['ValueRef'], 'Src')
+                SrcModule_Temp = extract_module_from_pdur_container_name(_src_container, 'Src') or extract_module_from_ecuc_pdu_ref(srcInfoStruct['PduRSrcPduRef']['ValueRef'], 'Src')
                 SrcModule += SrcModule_Temp
                 if SrcModule.upper() == "PDUR_DOIP":
                     SrcModule += "_TP" # 当前不考虑DoIP_If
@@ -419,7 +437,7 @@ def process_pdur_routing_paths_src_info(name: str, dict: dict, config_dict: dict
             elif isinstance(srcInfoStruct['PduRSrcPduRef']['ValueRef'], list):
                 for ref in srcInfoStruct['PduRSrcPduRef']['ValueRef']:
                     SrcPduName_Temp = ref.split("/")[-1]
-                    SrcModule_Temp = extract_module_from_ecuc_pdu_ref(ref, 'Src')
+                    SrcModule_Temp = extract_module_from_pdur_container_name(_src_container, 'Src') or extract_module_from_ecuc_pdu_ref(ref, 'Src')
                     SrcModule += SrcModule_Temp
                     if SrcModule.upper() == "PDUR_DOIP":
                         SrcModule += "_TP" # 当前不考虑DoIP_If
@@ -452,15 +470,18 @@ def process_pdur_path_name_dest(dict: dict, config_dict: dict) -> str:
 def process_pdur_direct_gateway(pathItem: dict, config_dict: dict) -> str:
     PduRTpThreshld = 0
     PduRDirectGateway = 'PDUR_GATEWAY_DIRECT'
-    if pathItem['PduRTpThreshold']['Value'] != '' and pathItem['PduRTpThreshold']['Value'] != None:
-        PduRTpThreshld = pathItem["PduRTpThreshold"]["Value"]
+    # PduRTpThreshold optional (IF routing / AutoC omit) → DIRECT gateway
+    _thr = (pathItem.get('PduRTpThreshold') or {}).get('Value')
+    if _thr is not None and _thr != '':
+        PduRTpThreshld = _thr
         PduRDirectGateway = 'PDUR_GATEWAY_ONTHEFLY'
     return PduRDirectGateway, PduRTpThreshld
 
 def process_pdur_queue_depth(pathItem: dict) -> str:
     PduRQueueDepth = 1
-    if pathItem['PduRQueueDepth']['Value'] != '' and pathItem['PduRQueueDepth']['Value'] != None:
-        PduRQueueDepth = pathItem["PduRQueueDepth"]["Value"]
+    _qd = (pathItem.get('PduRQueueDepth') or {}).get('Value')
+    if _qd is not None and _qd != '':
+        PduRQueueDepth = _qd
     return PduRQueueDepth
 
 def process_pdur_routing_path_groups_info(name: str, dict: dict, config_dict: dict) -> dict:
@@ -717,31 +738,53 @@ def add_dest_pdu_info_into_routing_path_group(PduRRoutingPathGroups: dict, PduRR
                         groupValueFromGroupList['PduRDestPduNum'].append(len(path['PduRDestPdus']))
     return output
 
+def extract_module_from_pdur_container_name(container_name: str, direction: str) -> str:
+    """Infer CANIF/COM from AutoC-style PduR container names like Cmd_Control_Rx_Src / ECU_Status_Tx_Dest."""
+    if not isinstance(container_name, str) or not container_name:
+        return ''
+    short = container_name.split('/')[-1]
+    parts = short.split('_')
+    if len(parts) >= 2 and parts[-1] in ('Src', 'Dest') and parts[-2].upper() in ('RX', 'TX'):
+        tok = parts[-2].upper()
+        if direction == 'Src':
+            return 'CANIF' if tok == 'RX' else 'COM'
+        return 'COM' if tok == 'RX' else 'CANIF'
+    return ''
+
+
 def extract_module_from_ecuc_pdu_ref(valueRef: str, direction: str) -> str:
     ModName = ''
     OtherModule = ['_Rx', '_Tx', '_RX', '_TX', '_PduR', 'PduR_', '_PDUR', 'PDUR_', '_pdur', 'pdur_']
+    if not isinstance(valueRef, str) or not valueRef:
+        return ModName
+    # Guard: DBC/EcuC plain names (e.g. ECU_Status) lack Studio "_o<Module>_<Dir>" tokens.
+    _parts = valueRef.split('_')
+    if len(_parts) < 2:
+        return ModName
     if direction == 'Src':
-        if valueRef.split('_')[1] == 'MasterReq':
+        if _parts[1] == 'MasterReq':
             ModName = 'LINTP'
-        elif valueRef.split('_')[1] == 'SlaveResp':
+        elif _parts[1] == 'SlaveResp':
             ModName = 'LINTP'
         else:
             valueRef = valueRef.split('/')[-1]
             relStringList = valueRef.split('_o') # 需要考虑模块名内含有'_'
             if len(relStringList) != 0: # 按照'_o'搜索，非原有逻辑
                 relString = relStringList[-1]
-                if relString.find("PduR") != -1: # 兼容现在CanNm和Com之间的链接，需要修改，【参见ChangedIdI3a4995eaab853f71455f947cea3e5354213d6a73】
+                if relString.find("PduR") != -1: # 兼容现在CanNm和Com之间的链接
                     ModName = relString
                     for item in OtherModule:
                         ModName = ModName.replace(item, "")
-            if ModName == '': # 原有逻辑
-                ModName = valueRef.split('_')[-3]
-                ModName = ModName[1:]
-                ModName = ModName.upper()
+            if ModName == '': # 原有逻辑 — need >=3 underscore segments
+                segs = valueRef.split('_')
+                if len(segs) >= 3:
+                    ModName = segs[-3]
+                    ModName = ModName[1:]
+                    ModName = ModName.upper()
     elif direction == 'Dest':
-        if valueRef.split('_')[1] == 'MasterReq':
+        if _parts[1] == 'MasterReq':
             ModName = 'LINTP'
-        elif valueRef.split('_')[1] == 'SlaveResp':
+        elif _parts[1] == 'SlaveResp':
             ModName = 'LINTP'
         else:
             valueRef = valueRef.split('/')[-1]
@@ -752,8 +795,9 @@ def extract_module_from_ecuc_pdu_ref(valueRef: str, direction: str) -> str:
                     ModName = relString
                     for item in OtherModule:
                         ModName = ModName.replace(item, "")
-            if ModName == '': # 原有逻辑
-                ModName = valueRef.split('_')[-2]
-                ModName = ModName
-                ModName = ModName.upper()
+            if ModName == '': # 原有逻辑 — need >=2 underscore segments on short name
+                segs = valueRef.split('_')
+                if len(segs) >= 2:
+                    ModName = segs[-2]
+                    ModName = ModName.upper()
     return ModName

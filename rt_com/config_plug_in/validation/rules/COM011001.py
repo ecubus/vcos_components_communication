@@ -90,8 +90,12 @@ class Com011001Rule(BasicRule):
             if not isinstance(ipdu_value, dict):
                 continue
             com_ipdu_id_path = com_ipdu_path + "/" + "ComIPduHandleId"
+            # Presence is COM011010; skip duplicate-check when HandleId missing/empty.
+            handle = ipdu_value.get("ComIPduHandleId")
+            if not isinstance(handle, dict) or handle.get("Value") is None or handle.get("Value") == "":
+                continue
             validation_data = {}
-            validation_data["comipdu_id"] = ipdu_value["ComIPduHandleId"]["Value"]
+            validation_data["comipdu_id"] = handle["Value"]
             validation_data_list.append(validation_data)
             validataion_data_path_list.append(com_ipdu_id_path)
 

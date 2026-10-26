@@ -134,7 +134,11 @@ class PduRRule():
             if "DefinitionRef" not in pdurdestpdu or pdurdestpdu[
               "DefinitionRef"] != "/AUTOSAR/EcucDefs/PduR/PduRRoutingPaths/PduRDestPdu":
                 continue
-            dstpduhandleid = int(pdurdestpdu["PduRDestPduHandleId"]["Value"])
+            handle = (pdurdestpdu.get("PduRDestPduHandleId") or {})
+            handle_val = handle.get("Value") if isinstance(handle, dict) else None
+            if handle_val is None or handle_val == "":
+                continue  # OPT [0..1]
+            dstpduhandleid = int(handle_val)
             if dstpduhandleid > maxroutingpathcnt:
                 valid = False and valid
                 self.log += "the value {} of /ActiveEcuC/PduR/PduRRoutingPaths/PduRDestPdu/{}/PduRDestPduHandleId is not less than the maximum value:{}".format(dstpduhandleid, name, maxroutingpathcnt) + \
@@ -174,7 +178,11 @@ class PduRRule():
             if "DefinitionRef" not in pdurdestpdu or pdurdestpdu[
               "DefinitionRef"] != "/AUTOSAR/EcucDefs/PduR/PduRRoutingPaths/PduRDestPdu":
                 continue
-            dstpduhandleid = int(pdurdestpdu["PduRDestPduHandleId"]["Value"])
+            handle = (pdurdestpdu.get("PduRDestPduHandleId") or {})
+            handle_val = handle.get("Value") if isinstance(handle, dict) else None
+            if handle_val is None or handle_val == "":
+                continue  # OPT [0..1]
+            dstpduhandleid = int(handle_val)
             if dstpduhandleid > maxroutingpathgroupcnt:
                 valid = False and valid
                 self.log += "the value {} of /ActiveEcuC/PduR/PduRRoutingPaths/PduRDestPdu/{}/PduRDestPduHandleId is not less than the maximum value:{}".format(dstpduhandleid, name, maxroutingpathgroupcnt) + \

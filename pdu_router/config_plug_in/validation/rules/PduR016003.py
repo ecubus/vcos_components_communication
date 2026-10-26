@@ -71,7 +71,13 @@ class PduR016003Rule(BasicRule):
             if "DefinitionRef" not in pdurdestpdu or pdurdestpdu[
               "DefinitionRef"] != "/AUTOSAR/EcucDefs/PduR/PduRRoutingPaths/PduRDestPdu":
                 continue
-            srcpduhandleid = int(pdurdestpdu["PduRDestPduHandleId"]["Value"])
+            # ECUC_PduR_00322: PduRDestPduHandleId is OPT [0..1] — skip range check when unset
+            # (do not invent; avoids KeyError traceback that pushes agents to read rule py).
+            handle = (pdurdestpdu.get("PduRDestPduHandleId") or {})
+            handle_val = handle.get("Value") if isinstance(handle, dict) else None
+            if handle_val is None or handle_val == "":
+                continue
+            srcpduhandleid = int(handle_val)
             if srcpduhandleid > maxroutingpathcnt:
                 valid = False
                 validation_data_list = []

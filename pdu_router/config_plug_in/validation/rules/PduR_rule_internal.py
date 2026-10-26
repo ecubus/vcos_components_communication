@@ -196,7 +196,12 @@ class PduRRule():
             if not AutosarUtil.get_by_path_from_dict(pdurdestpdu, "/PduRDestPduRef/ValueRef"):
                 continue
             pdurdestpduref_path = pdurdestpdu["PduRDestPduRef"]["ValueRef"]
-            pdurdestpdudataprovision = pdurdestpdu["PduRDestPduDataProvision"]["Value"]
+            # BSWMD OPT + DEFAULT PDUR_DIRECT — do not FAIL on absence
+            _prov_node = pdurdestpdu.get("PduRDestPduDataProvision")
+            if isinstance(_prov_node, dict) and _prov_node.get("Value") is not None and str(_prov_node.get("Value")).strip() != "":
+                pdurdestpdudataprovision = _prov_node["Value"]
+            else:
+                pdurdestpdudataprovision = "PDUR_DIRECT"
             # ignore: lin diagnostic frames
             if "MasterReq" in pdurdestpduref_path or "SlaveResp" in pdurdestpduref_path:
                 continue

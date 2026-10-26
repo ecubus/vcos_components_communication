@@ -264,8 +264,8 @@ def get_dynamic_code_template_input_parameter_dict(Config_dict: dict) -> dict:
             # 处理信号组
             pre_handle_Signal_Group(ComGeneral, ComConfig, ipdu, signal_id, coreId)
 
-            ComConfig["ComIPdus"][coreId][ipdu]["ComIPduSignalNum"] = len(
-                ComConfig["ComIPdus"][coreId][ipdu]["ComIPduSignalRef"]["ValueRef"])
+            _sig_ref = ComConfig["ComIPdus"][coreId][ipdu]["ComIPduSignalRef"].get("ValueRef") or []
+            ComConfig["ComIPdus"][coreId][ipdu]["ComIPduSignalNum"] = len(_sig_ref)
             
             # 计算IPDU中的最大信号个数
             if ComConfig["ComIPdus"][coreId][ipdu]["direction"] == "COM_RECEIVE":
@@ -643,14 +643,29 @@ def handle_Ipdusort_Depend_ComMainFunctionRef(ComConfig: dict, ComIpdus_sort: di
         ComGeneral["mainfunction_num"][coreId]["mainfunction_rx_num"] = mainfunction_rx_num
 
 
+def _require_numeric_handle_id(container: dict, key: str, name: str) -> int:
+    """Return configured handle id. Missing/empty must fail verify (COM011010/011011) — do not invent."""
+    handle = container.get(key) if isinstance(container, dict) else None
+    if isinstance(handle, dict) and handle.get("Value") is not None and handle.get("Value") != "":
+        try:
+            return int(handle["Value"])
+        except (TypeError, ValueError):
+            pass
+    raise ValueError(
+        f"{name} missing numeric {key}; configure it (verify COM011010/COM011011) — "
+        f"generator must not invent HandleIds"
+    )
+
+
 def handle_Ipdusort_Depend_ComIPduHandleId(ComConfig: dict) -> dict:
     com_ipdus_list = []
     for ipdu_name, ipdu_cfg in ComConfig.items():
         ipdu = {}
         ipdu.update(ipdu_cfg)
         ipdu["Name"] = ipdu_name
+        _require_numeric_handle_id(ipdu, "ComIPduHandleId", f"ComIPdu {ipdu_name}")
         com_ipdus_list.append(ipdu)
-    com_ipdus_list.sort(key=lambda ipdu: ipdu["ComIPduHandleId"]["Value"])
+    com_ipdus_list.sort(key=lambda ipdu: int(ipdu["ComIPduHandleId"]["Value"]))
 
     ComIpdus_sort = {}
     for i in range(len(com_ipdus_list)):
@@ -664,8 +679,9 @@ def handle_Ipdusort_Depend_ComIPduGroupHandleId(ComConfig: dict) -> dict:
         ipdugroup = {}
         ipdugroup.update(ipdugroup_cfg)
         ipdugroup["Name"] = ipdugroup_name
+        _require_numeric_handle_id(ipdugroup, "ComIPduGroupHandleId", f"ComIPduGroup {ipdugroup_name}")
         com_ipduGroup_list.append(ipdugroup)
-    com_ipduGroup_list.sort(key=lambda ipdu: ipdu["ComIPduGroupHandleId"]["Value"])
+    com_ipduGroup_list.sort(key=lambda ipdu: int(ipdu["ComIPduGroupHandleId"]["Value"]))
 
     ComIpduGroups_sort = {}
     for i in range(len(com_ipduGroup_list)):
@@ -694,6 +710,13 @@ def handle_Signalsort_Depend_SignalId(Com_Signal: dict) -> dict:
 def handle_Str_To_List(ComIpdus: dict):
     Templist = []
     for ipdu in list(ComIpdus.keys()):
+        # Studio editor always writes these refs (even empty); AutoC may omit empty ones.
+        # ValueRef=None (leaf present but empty) must not reach len() → TypeError.
+        for ref_key in ("ComIPduSignalRef", "ComIPduGroupRef", "ComIPduSignalGroupRef"):
+            if ref_key not in ComIpdus[ipdu] or not isinstance(ComIpdus[ipdu].get(ref_key), dict):
+                ComIpdus[ipdu][ref_key] = {"ValueRef": ""}
+            elif "ValueRef" not in ComIpdus[ipdu][ref_key] or ComIpdus[ipdu][ref_key]["ValueRef"] is None:
+                ComIpdus[ipdu][ref_key]["ValueRef"] = ""
         if isinstance(ComIpdus[ipdu]["ComIPduSignalRef"]["ValueRef"], str):
             Templist.append(ComIpdus[ipdu]["ComIPduSignalRef"]["ValueRef"])
             ComIpdus[ipdu]["ComIPduSignalRef"]["ValueRef"] = Templist.copy()
@@ -862,71 +885,109 @@ def handle_message_direction(ComGeneral: dict, ComConfig: dict, IPdu: str, TxIpd
         ComGeneral["COM_IPDU_TP_ENABLE"] = "STD_ON"
     return TxIpdu_id
 
+def _com_num_value(container: dict, key: str, default=0.0):
+    """Read optional numeric ECUC param; AutoC/partial configs may omit isOpt nodes."""
+    if not isinstance(container, dict):
+        return default
+    node = container.get(key)
+    if isinstance(node, dict) and node.get("Value") is not None and node.get("Value") != "":
+        try:
+            return float(node["Value"])
+        except (TypeError, ValueError):
+            return default
+    return default
+
+
+def _com_set_num_value(container: dict, key: str, value):
+    if not isinstance(container, dict):
+        return
+    node = container.get(key)
+    if isinstance(node, dict):
+        node["Value"] = value
+    else:
+        container[key] = {"Value": value}
+
+
+def _com_tx_mode_body(tx_ipdu: dict, mode_key: str):
+    """Return ComTxMode dict if mode_key container already present; do not invent True/False."""
+    mode_wrap = tx_ipdu.get(mode_key)
+    if not isinstance(mode_wrap, dict):
+        return None
+    mode_body = mode_wrap.get("ComTxMode")
+    if isinstance(mode_body, dict):
+        return mode_body
+    # Container present without nested ComTxMode — treat as empty params (still configured).
+    mode_wrap["ComTxMode"] = {}
+    return mode_wrap["ComTxMode"]
+
+
 def handle_message_periodic(ComConfig: dict, IPdu: str, coreId):
     if ComConfig["ComIPdus"][coreId][IPdu]["ComIPduDirection"]["Value"] == "SEND":
-        #ComTxModeTimePeriod
-        ComTxModeTimePeriod = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode'][
-            'ComTxModeTimePeriod']['Value'] * 1000
+        tx_ipdu = ComConfig['ComIPdus'][coreId][IPdu].get('ComTxIPdu')
+        if not isinstance(tx_ipdu, dict):
+            # COM013009 should have failed verify; skip rather than invent ComTxIPdu.
+            return
 
-        IPduMainFunctionRef = ComConfig['ComIPdus'][coreId][IPdu]['IPduMainFunctionRef']['ValueRef']
+        IPduMainFunctionRef = ComConfig['ComIPdus'][coreId][IPdu].get('IPduMainFunctionRef', {}).get('ValueRef') or ""
         IPduMainFunctionRef = IPduMainFunctionRef[IPduMainFunctionRef.rfind("/") + 1:]
-        
-        ComIPduTxTimeBase = ComConfig['ComMainFunction_tx'][coreId][IPduMainFunctionRef]['MainTxTimeBase']['Value'] * 1000
+        mf = (ComConfig.get('ComMainFunction_tx') or {}).get(coreId, {}).get(IPduMainFunctionRef)
+        if not isinstance(mf, dict):
+            return
+        ComIPduTxTimeBase = _com_num_value(mf, 'MainTxTimeBase', 0.0) * 1000
+        if ComIPduTxTimeBase == 0:
+            # avoid ZeroDivisionError; leave values as-is / defaults
+            ComIPduTxTimeBase = 1.0
 
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode']['ComTxModeTimePeriod']['Value'] = int(
-            ComTxModeTimePeriod / ComIPduTxTimeBase)
-        
+        # Only touch ComTxModeTrue when already present — do not invent (COM013009).
+        mode_true = _com_tx_mode_body(tx_ipdu, 'ComTxModeTrue')
+        if mode_true is None:
+            return
+
+        #ComTxModeTimePeriod (True) — optional numeric (BSWMD lower=0)
+        ComTxModeTimePeriod = _com_num_value(mode_true, 'ComTxModeTimePeriod', 0.0) * 1000
+        _com_set_num_value(mode_true, 'ComTxModeTimePeriod', int(ComTxModeTimePeriod / ComIPduTxTimeBase))
+
         #给RTE信号代理提供的周期信息
-        ComConfig['ComIPdus'][coreId][IPdu]["Rte_GetTxModeMode"] = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode'].get('ComTxModeMode', {}).get("Value", "NONE")
+        ComConfig['ComIPdus'][coreId][IPdu]["Rte_GetTxModeMode"] = mode_true.get('ComTxModeMode', {}).get("Value", "NONE") if isinstance(mode_true.get('ComTxModeMode'), dict) else "NONE"
         ComConfig['ComIPdus'][coreId][IPdu]["Rte_GetPeriodTime"] = int(ComTxModeTimePeriod)
         ComConfig['ComIPdus'][coreId][IPdu]["Rte_GetMainFunctionTime"] = int(ComIPduTxTimeBase)
         ComConfig['ComIPdus'][coreId][IPdu]["Rte_GetMainFunctionName"] = IPduMainFunctionRef
 
-        #ComTxModeTimeOffset
-        ComTxModeTimeOffset = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode'][
-            'ComTxModeTimeOffset']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode']['ComTxModeTimeOffset']['Value'] = int(
-            ComTxModeTimeOffset / ComIPduTxTimeBase)
+        #ComTxModeTimeOffset / RepetitionPeriod (True) — optional
+        for key in ('ComTxModeTimeOffset', 'ComTxModeRepetitionPeriod'):
+            ms = _com_num_value(mode_true, key, 0.0) * 1000
+            _com_set_num_value(mode_true, key, int(ms / ComIPduTxTimeBase))
 
-        #ComTxModeRepetitionPeriod
-        ComTxModeRepetitionPeriod = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode'][
-            'ComTxModeRepetitionPeriod']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode']['ComTxModeRepetitionPeriod'][
-            'Value'] = int(ComTxModeRepetitionPeriod / ComIPduTxTimeBase)
+        #ComMinimumDelayTime — optional
+        mdt = _com_num_value(tx_ipdu, 'ComMinimumDelayTime', 0.0) * 1000
+        _com_set_num_value(tx_ipdu, 'ComMinimumDelayTime', int(mdt / ComIPduTxTimeBase))
 
-        #ComMinimumDelayTime
-        ComTxModeRepetitionPeriod = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComMinimumDelayTime']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComMinimumDelayTime']['Value'] = int(ComTxModeRepetitionPeriod /
-                                                                                       ComIPduTxTimeBase)
+        # ComTxModeFalse: BSWMD OPT / only required with TMS (COM013008).
+        # When absent (no TMS), mirror True into False so pbcfg false_cfg[] has a slot
+        # (same mode both sides) — codegen alias, not inventing a distinct False mode.
+        modes_for_reps = [mode_true]
+        mode_false = _com_tx_mode_body(tx_ipdu, 'ComTxModeFalse')
+        if mode_false is None and isinstance(tx_ipdu.get('ComTxModeTrue'), dict):
+            tx_ipdu['ComTxModeFalse'] = copy.deepcopy(tx_ipdu['ComTxModeTrue'])
+            # Retarget DefinitionRef suffix if present
+            false_wrap = tx_ipdu['ComTxModeFalse']
+            if isinstance(false_wrap.get('DefinitionRef'), str):
+                false_wrap['DefinitionRef'] = false_wrap['DefinitionRef'].replace(
+                    'ComTxModeTrue', 'ComTxModeFalse')
+            mode_false = _com_tx_mode_body(tx_ipdu, 'ComTxModeFalse')
+        if mode_false is not None:
+            for key in ('ComTxModeTimePeriod', 'ComTxModeTimeOffset', 'ComTxModeRepetitionPeriod'):
+                ms = _com_num_value(mode_false, key, 0.0) * 1000
+                _com_set_num_value(mode_false, key, int(ms / ComIPduTxTimeBase))
+            modes_for_reps.append(mode_false)
 
-        #ComTxModeTimePeriod
-        ComTxModeTimePeriod = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode'][
-            'ComTxModeTimePeriod']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode']['ComTxModeTimePeriod']['Value'] = int(
-            ComTxModeTimePeriod / ComIPduTxTimeBase)
-
-        #ComTxModeTimeOffset
-        ComTxModeTimeOffset = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode'][
-            'ComTxModeTimeOffset']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode']['ComTxModeTimeOffset']['Value'] = int(
-            ComTxModeTimeOffset / ComIPduTxTimeBase)
-
-        #ComTxModeRepetitionPeriod
-        ComTxModeRepetitionPeriod = ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode'][
-            'ComTxModeRepetitionPeriod']['Value'] * 1000
-        ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode']['ComTxModeRepetitionPeriod'][
-            'Value'] = int(ComTxModeRepetitionPeriod / ComIPduTxTimeBase)
-
-        #ComTxModeNumberOfRepetitions
-        if (ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode']['ComTxModeNumberOfRepetitions']
-            ['Value'] > 0):
-            ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeTrue']['ComTxMode']['ComTxModeNumberOfRepetitions'][
-                'Value'] += 1
-
-        if (ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode']['ComTxModeNumberOfRepetitions']
-            ['Value'] > 0):
-            ComConfig['ComIPdus'][coreId][IPdu]['ComTxIPdu']['ComTxModeFalse']['ComTxMode']['ComTxModeNumberOfRepetitions'][
-                'Value'] += 1
+        #ComTxModeNumberOfRepetitions — optional; bump by 1 when > 0 (legacy codegen quirk)
+        for mode in modes_for_reps:
+            reps = int(_com_num_value(mode, 'ComTxModeNumberOfRepetitions', 0))
+            if reps > 0:
+                _com_set_num_value(mode, 'ComTxModeNumberOfRepetitions', reps + 1)
+            else:
+                _com_set_num_value(mode, 'ComTxModeNumberOfRepetitions', reps)
 
 def handle_messag_Signal_StartIdx_from_direction(ComConfig: dict, IPdu: str, signal_id_tx, signal_id_rx, coreId):
     if ComConfig["ComIPdus"][coreId][IPdu]["ComIPduDirection"]["Value"] == "SEND":
@@ -964,7 +1025,7 @@ def handle_MainFunctionRx_RxNotificationRecord(ComGeneral: dict, ComConfig: dict
                 IPduMainFunctionRef = IPduMainFunctionRef[IPduMainFunctionRef.rfind("/") + 1:]
                 if IPduMainFunctionRef == mainfunction_rx:
                     # 获取该MainFunction对应的IPDU最大的Signal个数
-                    MainFunction_Ipdu_MaxSig_Num = len(ComConfig["ComRxIPdus"][coreId][ipdu]["ComIPduSignalRef"]["ValueRef"])
+                    MainFunction_Ipdu_MaxSig_Num = len(ComConfig["ComRxIPdus"][coreId][ipdu]["ComIPduSignalRef"].get("ValueRef") or [])
                     if com_mainfunction_Info[mainfunction_rx]["Ipdu_MaxSig_Num"] < MainFunction_Ipdu_MaxSig_Num:
                         com_mainfunction_Info[mainfunction_rx]["Ipdu_MaxSig_Num"] = MainFunction_Ipdu_MaxSig_Num
             if com_mainfunction_Info[mainfunction_rx]["Ipdu_MaxSig_Num"] == 0:
@@ -1027,7 +1088,11 @@ def handle_message_info(ComGeneral:dict, ComConfig: dict, IPdu: str, message_id,
 
     # IPduGroupRefs - remove preffix
 
-    ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupNum"] = len(ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupRef"]["ValueRef"])
+    _group_ref = ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupRef"].get("ValueRef")
+    if _group_ref is None:
+        _group_ref = []
+        ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupRef"]["ValueRef"] = _group_ref
+    ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupNum"] = len(_group_ref)
     new_IpduGroup_ref = []
     for ComIPduGroupId in list(ComConfig["ComIPdus"][coreId][IPdu]["ComIPduGroupRef"]["ValueRef"]):
         ComIPduGroupId = ComIPduGroupId[ComIPduGroupId.rfind("/") + 1:]
@@ -1099,8 +1164,43 @@ def handle_callout(ComConfig: dict, IPdu: str, rx_callout_id: int, tx_callout_id
 #     del ComConfig["ComIPdus"][signal]
 
 
+
+def _com_ensure_opt_param(container: dict, key: str, default):
+    """Fill missing optional ECUC numeric/textual param nodes (AutoC omits empty isOpt)."""
+    if not isinstance(container, dict):
+        return
+    node = container.get(key)
+    if not isinstance(node, dict):
+        container[key] = {"Value": default}
+    elif node.get("Value") is None or node.get("Value") == "":
+        # keep empty-string for stringy defaults when default is ""; treat None as missing
+        if node.get("Value") is None:
+            node["Value"] = default
+
+
+def _com_normalize_signal_optional_params(signal_cfg: dict):
+    """Defaults matching Studio editor behavior for omitted optional ComSignal params."""
+    if not isinstance(signal_cfg, dict):
+        return
+    _com_ensure_opt_param(signal_cfg, "ComUpdateBitPosition", 0)
+    _com_ensure_opt_param(signal_cfg, "ComTransferProperty", "PENDING")
+    _com_ensure_opt_param(signal_cfg, "ComDataInvalidAction", "NOTIFY")
+    _com_ensure_opt_param(signal_cfg, "ComRxDataTimeoutAction", "NONE")
+    _com_ensure_opt_param(signal_cfg, "ComNotification", "")
+    _com_ensure_opt_param(signal_cfg, "ComInvalidNotification", "")
+    _com_ensure_opt_param(signal_cfg, "ComErrorNotification", "")
+    _com_ensure_opt_param(signal_cfg, "ComTimeoutNotification", "")
+    _com_ensure_opt_param(signal_cfg, "ComTimeout", 0)
+    _com_ensure_opt_param(signal_cfg, "ComFirstTimeout", 0)
+    _com_ensure_opt_param(signal_cfg, "ComSignalDataInvalidValue", "")
+    _com_ensure_opt_param(signal_cfg, "ComSignalLength", 0)
+    # BSWMD lower=0; AUTOSAR default is all-zero. Omitted leaf must not KeyError in codegen.
+    _com_ensure_opt_param(signal_cfg, "ComSignalInitValue", "0")
+
 def handle_update_bit(ComGeneral: dict, ComConfig: dict, IPdu: str, signal: str, coreId):
-    if ComConfig["ComSignals"][coreId][signal]["ComUpdateBitPosition"]["Value"] != 0:
+    sig = ComConfig["ComSignals"][coreId][signal]
+    _com_normalize_signal_optional_params(sig)
+    if sig["ComUpdateBitPosition"]["Value"] != 0:
         ComGeneral["COM_SIGNAL_UPDATEBIT_ENABLE"] = "STD_ON"
         ComConfig["ComSignals"][coreId][signal]["UseUpdateBit"] = "TRUE"
 
@@ -1399,6 +1499,7 @@ def handle_Signal_InitParameter(ComGeneral: dict):
 
 
 def handle_signal_info(ComGeneral: dict, ComConfig: dict, IPdu: str, signal: str, signal_id, coreId) -> int:
+    _com_normalize_signal_optional_params(ComConfig["ComSignals"][coreId][signal])
     # signal attribute: message_name
     ComConfig["ComSignals"][coreId][signal]["message_name"] = ComConfig["ComIPdus"][coreId][IPdu]["MessageName"]
     # signal attribute: signal_id
@@ -1484,7 +1585,8 @@ def handle_signal_info(ComGeneral: dict, ComConfig: dict, IPdu: str, signal: str
     handle_SignalBusAccType(ComConfig, signal, coreId)
     
 
-    if ComConfig["ComSignals"][coreId][signal]["ComUpdateBitPosition"]["Value"] == None:
+    _com_ensure_opt_param(ComConfig["ComSignals"][coreId][signal], "ComUpdateBitPosition", 0)
+    if ComConfig["ComSignals"][coreId][signal]["ComUpdateBitPosition"]["Value"] is None:
         ComConfig["ComSignals"][coreId][signal]["ComUpdateBitPosition"]["Value"] = 0
 
     # if signal == "PATResponseCode_oFBCM_Code_Info1_oFBCM_BDCAN1_Tx":
@@ -1515,7 +1617,11 @@ def handle_signal_info(ComGeneral: dict, ComConfig: dict, IPdu: str, signal: str
     ComConfig["ComSignals"][coreId][signal]['isSignalTOut'] = "FALSE"
     ComConfig["ComSignals"][coreId][signal]['isSignalNotification'] = "FALSE"
     # handle timeout value
-    if signal[-3:] == "_Rx":
+    # Prefer IPdu direction: AutoC/DBC signal names do not end with "_Rx"/"_Tx".
+    # Fall back to legacy suffix for Studio-imported names.
+    _ipdu_dir = ComConfig["ComIPdus"][coreId][IPdu].get("ComIPduDirection", {}).get("Value", "")
+    _is_rx = (_ipdu_dir == "RECEIVE") or (_ipdu_dir != "SEND" and signal[-3:] == "_Rx")
+    if _is_rx:
         #ComTimeout
         IPduMainFunctionRef = ComConfig['ComIPdus'][coreId][IPdu]['IPduMainFunctionRef']['ValueRef']
         IPduMainFunctionRef = IPduMainFunctionRef[IPduMainFunctionRef.rfind("/") + 1:]
@@ -1677,9 +1783,8 @@ def pre_handle_Signal_Group(ComGeneral: dict, ComConfig: dict, IPdu: str, signal
 
     ComConfig['ComIPdus'][coreId][IPdu]["ComIPduHasSignalGroup"] = "FALSE"
 
-    if ComConfig['ComIPdus'][coreId][IPdu]['ComIPduSignalGroupRef'][
-            "ValueRef"] is not None and ComConfig['ComIPdus'][coreId][IPdu]['ComIPduSignalGroupRef']['ValueRef'][
-                0] != '' and ComConfig['ComIPdus'][coreId][IPdu]['ComIPduSignalGroupRef']['ValueRef'][0] != '<empty>':
+    _sg_ref = ComConfig['ComIPdus'][coreId][IPdu].get('ComIPduSignalGroupRef', {}).get("ValueRef")
+    if (_sg_ref is not None and len(_sg_ref) > 0 and _sg_ref[0] != '' and _sg_ref[0] != '<empty>'):
         if "PduRef" in ComConfig["ComIPdus"][coreId][IPdu].keys():
             ComGeneral["ipdu_size"][coreId]["ipdu_size"] += ComConfig["ComIPdus"][coreId][IPdu]["PduRef"]["PduLength"]["Value"]
             if ComConfig["ComIPdus"][coreId][IPdu]["ComIPduDirection"]["Value"] == "SEND":

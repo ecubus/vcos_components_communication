@@ -254,7 +254,7 @@ def get_template_input_parameter_dict(config_dict_all: dict, sys_config: dict) -
     
     can_hoh_order_type = get_can_hoh_order_and_range_info(CanConfigSet, sys_config)
 
-    canif_version = get_can_version(CanGeneral["CanVersion"]["Value"])
+    canif_version = get_can_version(CanGeneral.get("CanVersion", {}).get("Value", "AUTOSAR_VERSION_431"))
     canif_public_cfg = get_Publiccfgs(config_dict)
     canif_private_cfg = get_Privatecfgs(config_dict)
     canif_dispatch_cfg = get_Dispatchcfgs(config_dict)
@@ -699,9 +699,11 @@ def get_core_id_from_canifctrlcoreref(core_id_ref, ecuc_dict):
 
 def update_core_id(canif_ctrl_core_dict, raw_Ctrlcfgs, ecuc_dict):
     for ctrl_name, ctrl_attr in raw_Ctrlcfgs.items():
+        # CanIfCtrlCoreRef is optional (single-core / AutoC may omit) → default core 0
+        core_ref = (ctrl_attr.get("CanIfCtrlCoreRef") or {}).get("ValueRef")
         canif_ctrl_core_dict[ctrl_name] = {
             "controller_id": ctrl_attr["CanIfCtrlId"]["Value"], \
-            "core_id": get_core_id_from_canifctrlcoreref(ctrl_attr["CanIfCtrlCoreRef"]["ValueRef"], ecuc_dict)
+            "core_id": get_core_id_from_canifctrlcoreref(core_ref, ecuc_dict)
             }
     return canif_ctrl_core_dict
 
@@ -1141,10 +1143,12 @@ def get_txpdu_info(pdu: object, txbuffercfgs: object, ecuc_dict: dict, cdd_txpdu
     tx_pdu["shortname"] = pdu["ShortName"]
     tx_pdu["canid"] = hex(pdu["CanIfTxPduCanId"]["Value"])
     
-    if pdu["CanIfTxPduPnFilterPdu"]["Value"] == False:
-        tx_pdu["CanIfTxPduPnFilterEnable"] = "FALSE"
-    else:
+    # CanIfTxPduPnFilterPdu is optional; missing/False → filter disabled
+    _pn = (pdu.get("CanIfTxPduPnFilterPdu") or {}).get("Value")
+    if _pn is True or _pn == "true" or _pn == "TRUE":
         tx_pdu["CanIfTxPduPnFilterEnable"] = "TRUE"
+    else:
+        tx_pdu["CanIfTxPduPnFilterEnable"] = "FALSE"
         
     if "CanIfTxPduUserTxCalloutName" not in pdu or pdu["CanIfTxPduUserTxCalloutName"]["Value"] == '0' or pdu[
             "CanIfTxPduUserTxCalloutName"]["Value"] == None or pdu["CanIfTxPduUserTxCalloutName"]["Value"] == '':
@@ -1387,7 +1391,8 @@ def get_controller_cfgdata(Ctrlcfg: dict, txbuffercfgs: dict, CanConfigSet: dict
     canif_controller_config["ctrl_chnl_id"] = 0
     canif_controller_config["driverIdx"] = Ctrlcfg["driverIdx"]
     canif_controller_config["txBufferRefList_startname"] = "INVALID_HTH_NAME"
-    canif_controller_config["core_id"] = get_core_id_from_canifctrlcoreref(Ctrlcfg["CanIfCtrlCoreRef"]["ValueRef"], ecuc_dict)
+    _core_ref = (Ctrlcfg.get("CanIfCtrlCoreRef") or {}).get("ValueRef")
+    canif_controller_config["core_id"] = get_core_id_from_canifctrlcoreref(_core_ref, ecuc_dict)
     
     start_index_flag = False
     start_index_hth_name = ""

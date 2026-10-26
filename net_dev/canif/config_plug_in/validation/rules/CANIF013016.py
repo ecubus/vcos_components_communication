@@ -27,7 +27,7 @@ class CanIf013016Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "Check if canif hth and canif txbuffer match."
+        self.validation_summary = "CanIfBufferCfg shortName must align with CanIfHthCfg (1:1 buffer↔HTH)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -102,13 +102,15 @@ class CanIf013016Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHthCfg is same as CanIfTxBufferCfg.",    \
+                self.vlog(self.validation_code, self.validation_summary, "CanIfBufferCfg shortNames align with CanIfHthCfg.",    \
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"The CanIfBufferCfg mapping for CanIfInitHthCfg is missing. The configuration of the CanIfBufferCfg(s) should be checked.",
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/" + f"{test_dict['name_cur']}",
-                        "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"Missing CanIfBufferCfg for CanIfHthCfg '{test_dict['name_cur']}'. Create a CanIfBufferCfg whose shortName matches that HTH (under CanIfInitCfg).",
+                        "/ActiveEcuC/CanIf/CanIfInitCfg",
+                        "fail",
+                        [],
+                        [f"Add CanIfBufferCfg shortName={test_dict['name_cur']} under CanIf/CanIfInitCfg (1:1 with CanIfHthCfg)."])
 
         # 以canhthcfgs为基准，canifhthcfgs多余的container
         more_list = []
@@ -140,12 +142,15 @@ class CanIf013016Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHthCfg is same as CanIfTxBufferCfg.",
+                self.vlog(self.validation_code, self.validation_summary, "CanIfBufferCfg shortNames align with CanIfHthCfg.",
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/" + f"{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"There are more CanIfBufferCfg(s) mappings than there are CanIfInitHthCfg(s).", \
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/" + f"{test_dict['name_cur']}", "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfBufferCfg '{test_dict['name_cur']}' has no matching CanIfHthCfg. Rename/remove the buffer or add matching HTH.",
+                        f"/ActiveEcuC/CanIf/CanIfInitCfg/{test_dict['name_cur']}",
+                        "fail",
+                        [],
+                        [f"Rename or remove CanIfBufferCfg '{test_dict['name_cur']}' so buffers match CanIfHthCfg 1:1."])
 
 
 

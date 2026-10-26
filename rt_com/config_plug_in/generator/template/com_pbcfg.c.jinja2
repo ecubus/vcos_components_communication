@@ -1110,12 +1110,14 @@ static CONST(com_tx_mode_type, COM_CONST) comtxmode_false_cfg[{{ComGeneral.Param
      /* Index                                                                   ComTxModeNumberOfRepetitions         ComTxModeMode         ComTxModeRepetitionPeriodFactor    ComTxModeTimeOffsetFactor    ComTxModeTimePeriodFactor */
     {%- for IPdu in ComConfig.TxIpdus %}
         {%- set ipduObj = GetIPduObject(IPdu, ComConfig.ComIPdus_totle) %}
+        {#- No TMS: ComTxModeFalse optional — fall back to True (filter may also mirror). #}
+        {%- set _falseMode = ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode if (ipduObj.ComTxIPdu.ComTxModeFalse is defined and ipduObj.ComTxIPdu.ComTxModeFalse) else ipduObj.ComTxIPdu.ComTxModeTrue.ComTxMode %}
     {{ "{/*"~("%-65s" | format((" %+04s " | format(ipduObj.TxIpdu_id))~ipduObj.MessageName))~" */" }}
-    {{- ("%+20su" | format(ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode.ComTxModeNumberOfRepetitions.Value))~"," }}
-    {{- ("%+30s" | format("COM_" ~ ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode.ComTxModeMode.Value))~"," }}
-    {{- ("%+31su" | format(ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode.ComTxModeRepetitionPeriod.Value))~"," }}
-    {{- ("%+25su" | format(ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode.ComTxModeTimeOffset.Value))~"," }}
-    {{- ("%+26su" | format(ipduObj.ComTxIPdu.ComTxModeFalse.ComTxMode.ComTxModeTimePeriod.Value))~" }," }}
+    {{- ("%+20su" | format(_falseMode.ComTxModeNumberOfRepetitions.Value))~"," }}
+    {{- ("%+30s" | format("COM_" ~ _falseMode.ComTxModeMode.Value))~"," }}
+    {{- ("%+31su" | format(_falseMode.ComTxModeRepetitionPeriod.Value))~"," }}
+    {{- ("%+25su" | format(_falseMode.ComTxModeTimeOffset.Value))~"," }}
+    {{- ("%+26su" | format(_falseMode.ComTxModeTimePeriod.Value))~" }," }}
     {%- endfor %}
 };
 

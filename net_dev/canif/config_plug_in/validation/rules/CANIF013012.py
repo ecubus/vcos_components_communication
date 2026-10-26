@@ -27,7 +27,7 @@ class CanIf013012Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "Check if canifhrh and canhrh match."
+        self.validation_summary = "CanIf Hrh shortName must equal Can RECEIVE HardwareObject shortName (1:1 by name)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -101,13 +101,15 @@ class CanIf013012Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHrhCfg is same as Rx CanHardwareObject.",    \
+                self.vlog(self.validation_code, self.validation_summary, "CanIfHrhCfg shortNames match Can RECEIVE HardwareObjects.",    \
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"The mapping of CanHardwareObject(Rx) {test_dict['name_cur']} in the CanIf layer is missing. The configuration of the CanIfInitHrhCfg(s) should be checked.",
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}",
-                        "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfHrhCfg shortName must equal Can RECEIVE HardwareObject shortName. Missing CanIfHrhCfg named '{test_dict['name_cur']}' for Can/CanConfigSet/{test_dict['name_cur']}. Create CanIfHrhCfg with that shortName under CanIfInitHohCfg.",
+                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg",
+                        "fail",
+                        [],
+                        [f"Add CanIfHrhCfg shortName={test_dict['name_cur']} under CanIf/CanIfInitCfg/CanIfInitHohCfg/<HohRow>/CanIfHrhCfg (must match Can RECEIVE HO)."])
 
         # 以canhrhcfgs为基准，canifhrhcfgs多余的container
         more_list = []
@@ -138,12 +140,15 @@ class CanIf013012Rule(BasicRule):
 
             # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
             if valid == True:
-                self.vlog(self.validation_code, self.validation_summary, "All CanIfHrhCfg is same as Rx CanHardwareObject.",
+                self.vlog(self.validation_code, self.validation_summary, "CanIfHrhCfg shortNames match Can RECEIVE HardwareObjects.",
                         f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", "pass")
             else:
-                self.vlog(self.validation_code, self.validation_summary,    \
-                        f"There are more CanIfInitHrhCfg(s) mappings in the CanIf layer than there are CanHardwareObject(s) for the MCAL CAN Driver.", \
-                        "/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/" + f"{test_dict['name_cur']}", "fail")
+                self.vlog(self.validation_code, self.validation_summary,
+                        f"CanIfHrhCfg '{test_dict['name_cur']}' has no matching Can RECEIVE HardwareObject. Rename this CanIfHrhCfg to a Can HO shortName, or add/rename Can/CanConfigSet/{test_dict['name_cur']} as RECEIVE.",
+                        f"/ActiveEcuC/CanIf/CanIfInitCfg/CanIfInitHohCfg/{test_dict['name_cur']}",
+                        "fail",
+                        [],
+                        [f"Rename or remove CanIfHrhCfg '{test_dict['name_cur']}' so shortNames match Can RECEIVE HardwareObjects 1:1."])
 
 
 

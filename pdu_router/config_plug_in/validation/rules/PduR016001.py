@@ -28,7 +28,7 @@ class PduR016001Rule(BasicRule):
         super().__init__()
         self.logs = logs
         self.validation_code = self.__class__.ruleset_name
-        self.validation_summary = "PduRDestPduDataProvision should be set to PDUR_TRIGGERTRANSMIT!"
+        self.validation_summary = "CanNm Tx dest PDUs must use PduRDestPduDataProvision=PDUR_TRIGGERTRANSMIT (DIRECT is wrong for CanNm)."
         self.bsw_ecuc_cfg_class_dict = bsw_ecuc_cfg_class_dict
 
         self.durable_init()
@@ -75,26 +75,36 @@ class PduR016001Rule(BasicRule):
             if not AutosarUtil.get_by_path_from_dict(pdurdestpdu, "/PduRDestPduRef/ValueRef"):
                 continue
             pdurdestpduref_path = pdurdestpdu["PduRDestPduRef"]["ValueRef"]
-            pdurdestpdudataprovision = pdurdestpdu["PduRDestPduDataProvision"]["Value"]
+            service_id_path = "/ActiveEcuC/PduR/" + PduRRoutingPaths_Name + "/PduRDestPdu/" + name
+            # BSWMD OPT + DEFAULT-VALUE=PDUR_DIRECT — missing is not FAIL; apply default for semantic check.
+            _prov_node = pdurdestpdu.get("PduRDestPduDataProvision")
+            if isinstance(_prov_node, dict) and _prov_node.get("Value") is not None and str(_prov_node.get("Value")).strip() != "":
+                pdurdestpdudataprovision = _prov_node["Value"]
+            else:
+                pdurdestpdudataprovision = "PDUR_DIRECT"
             # ignore: lin diagnostic frames
             if "MasterReq" in pdurdestpduref_path or "SlaveResp" in pdurdestpduref_path:
                 continue
             if "Com_CanNm_Tx" in pdurdestpduref_path and pdurdestpdudataprovision == "PDUR_DIRECT":
                 valid = False
                 validation_data_list = []
-                service_id_path = "/ActiveEcuC/PduR/" + PduRRoutingPaths_Name + "/PduRDestPdu/" + name
                 # 2） 开始校验
                 # 格式："错误码", "摘要", "错误信息", "错误索引路径" "结果"
                 if valid:
                     self.vlog(
                       self.validation_code, self.validation_summary,
-                      f"PduRDestPduDataProvision[{pdurdestpdudataprovision}] should be set to PDUR_TRIGGERTRANSMIT!",
+                      f"Dest PDU {name} refs CanNm Tx ({pdurdestpduref_path}): PduRDestPduDataProvision is {pdurdestpdudataprovision}; set to PDUR_TRIGGERTRANSMIT (not PDUR_DIRECT).",
                       service_id_path, "pass")
                 else:
                     self.vlog(
                       self.validation_code, self.validation_summary,
-                      f"PduRDestPduDataProvision[{pdurdestpdudataprovision}] should be set to PDUR_TRIGGERTRANSMIT!",
-                      service_id_path, "fail")
+                      f"Dest PDU {name} refs CanNm Tx ({pdurdestpduref_path}): PduRDestPduDataProvision is {pdurdestpdudataprovision}; set to PDUR_TRIGGERTRANSMIT (not PDUR_DIRECT).",
+                      service_id_path, "fail",
+                      [{"solve_info": f"Set {service_id_path}/PduRDestPduDataProvision to PDUR_TRIGGERTRANSMIT.",
+                        "solve_type": "SetValue",
+                        "parameter": service_id_path + "/PduRDestPduDataProvision",
+                        "value": "PDUR_TRIGGERTRANSMIT"}],
+                      [f"Set PduRDestPduDataProvision at {service_id_path} to PDUR_TRIGGERTRANSMIT."])
                 # 3）清空ruleset中的所有fact，为下一次校验做准备
                 if len(validation_data_list) > 0:
                     retract_facts(self.__class__.ruleset_name, validation_data_list)
